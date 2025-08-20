@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ITAM – Dashboard Mock</title>
+<style>
+  :root{
+    --bg:#f9fafb;
+    --panel:#ffffff;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --line:#e5e7eb;
+    --accent:#fde68a; /* yellow */
+    --ok:#d1fae5;     /* green tint */
+    --warn:#ffedd5;   /* orange tint */
+    --ok-line:#10b981;
+    --warn-line:#f59e0b;
+    --brand:#111827;
+  }
+  .dark{
+    --bg:#0b0f14;
+    --panel:#0f172a;
+    --text:#e5e7eb;
+    --muted:#94a3b8;
+    --line:#1f2937;
+    --accent:#a16207;
+    --ok:#064e3b;
+    --warn:#4a2f11;
+    --ok-line:#34d399;
+    --warn-line:#fbbf24;
+    --brand:#f9fafb;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    background:var(--bg);
+    color:var(--text);
+  }
+
+  .app{
+    max-width:1200px;
+    margin:24px auto;
+    padding:0 16px 24px;
+  }
+
+  header h1{
+    margin:0 0 8px 0;
+    font-size: clamp(20px, 2vw, 28px);
+    font-weight: 800;
+    color:var(--brand);
+    letter-spacing:.2px;
+  }
+  header p{
+    margin:0 0 24px 0;
+    color:var(--muted);
+  }
+
+  .frame{
+    display:grid;
+    grid-template-columns: 230px 1fr 260px;
+    gap:16px;
+  }
+
+  aside.left, aside.right, main{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:12px;
+  }
+
+  /* left nav */
+  aside.left{
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .navitem{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    cursor:pointer;
+    user-select:none;
+  }
+  .navitem.active{
+    background:var(--accent);
+    border-color:transparent;
+    font-weight:700;
+  }
+  .navitem svg{width:22px;height:22px;flex:none}
+
+  /* right filter list */
+  aside.right{
+    padding:12px;
+  }
+  .panel-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:8px;
+  }
+  .chip{
+    background:var(--accent);
+    padding:8px 12px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    font-weight:700;
+  }
+  .filter-list{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .filter-list button{
+    text-align:left;
+    width:100%;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--text);
+    cursor:pointer;
+  }
+  .filter-list button.active{
+    outline:2px solid var(--brand);
+  }
+
+  /* main */
+  main{
+    padding:16px;
+  }
+  .main-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:10px;
+  }
+  .title{
+    font-size: clamp(18px, 1.8vw, 24px);
+    font-weight:800;
+  }
+  .year-select{
+    display:flex; align-items:center; gap:8px;
+  }
+  select, .btn{
+    padding:8px 12px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--text);
+  }
+  .cards{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .card{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px;
+    display:grid;
+    grid-template-columns: 56px 1fr;
+    gap:12px;
+    position:relative;
+  }
+  .card.ok{ background: linear-gradient(0deg, var(--ok), var(--ok)); border-left:4px solid var(--ok-line);}
+  .card.warn{ background: linear-gradient(0deg, var(--warn), var(--warn)); border-left:4px solid var(--warn-line);}
+  .icon{
+    width:48px;height:48px;border-radius:50%;
+    border:1px solid var(--line);
+    display:grid;place-items:center;
+    background:rgba(0,0,0,.03);
+  }
+  .meta b{display:block; margin-bottom:4px;}
+  .meta small{color:var(--muted)}
+  .badge{
+    position:absolute;right:10px;top:10px;
+    border:1px solid var(--line);
+    padding:4px 8px;border-radius:999px;font-size:12px;
+    background:var(--panel);
+  }
+
+  /* footer controls */
+  .foot{
+    margin-top:16px;
+    display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+  }
+  .iconbtn{
+    width:42px;height:42px;border-radius:50%;
+    display:grid;place-items:center;
+    border:1px solid var(--line);
+    background:var(--panel);
+  }
+  .group{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:10px 12px;
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    background:var(--panel);
+  }
+  .seg{
+    display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  }
+  .seg button{
+    border:0;background:transparent;padding:8px 10px;cursor:pointer;color:var(--text);
+  }
+  .seg button.active{ background:var(--accent); font-weight:700; }
+
+  /* responsive */
+  @media (max-width: 980px){
+    .frame{ grid-template-columns: 1fr; }
+    aside.right{ order:3 }
+    aside.left{ order:1; }
+    main{ order:2; }
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header>
+    <h1 id="appTitle">Name app : ITAM (IT Asset Management)</h1>
+    <p id="subtitle">Home page of the app: Dashboard for User</p>
+  </header>
+
+  <div class="frame">
+    <!-- Left Sidebar -->
+    <aside class="left">
+      <div class="navitem active" data-nav="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M3 11l9-8 9 8" />
+          <path d="M5 10v10h14V10" />
+        </svg>
+        <span id="navDashboard">Dashboard</span>
+      </div>
+      <div class="navitem" data-nav="itemreq">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <rect x="4" y="3" width="16" height="18" rx="2"/>
+          <path d="M8 7h8M8 11h8M8 15h5"/>
+        </svg>
+        <span id="navItemReq">Item Req.</span>
+      </div>
+      <div class="foot" style="margin-top:auto">
+        <div class="iconbtn" title="Account">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="8" r="4"/><path d="M4 21c2-4 6-6 8-6s6 2 8 6"/>
+          </svg>
+        </div>
+        <div class="iconbtn" title="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M6 8a6 6 0 1112 0c0 7 3 6 3 8H3c0-2 3-1 3-8"/>
+            <path d="M9 20a3 3 0 006 0"/>
+          </svg>
+        </div>
+        <div class="iconbtn" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"/>
+            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V22a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.9 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 007 4.9c.2.4.3.84.3 1.28V6a1.65 1.65 0 001-1.51V4a2 2 0 114 0v.09c0 .56.21 1.1.59 1.51.38.41.9.66 1.46.7h.36A1.65 1.65 0 0017 4.9l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.4.2.84.3 1.28.3H21a2 2 0 110 4h-.09c-.44 0-.88.1-1.28.3z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="group">
+        <div>
+          <div><b id="labelTheme">ColorTheme:</b></div>
+          <div class="seg" role="group" aria-label="Theme">
+            <button id="themeLight" class="active">White</button>
+            <button id="themeDark">Black</button>
+          </div>
+        </div>
+        <div>
+          <div><b id="labelLang">Language:</b></div>
+          <div class="seg" role="group" aria-label="Language">
+            <button id="langTH" class="active">TH</button>
+            <button id="langEN">EN</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main>
+      <div class="main-head">
+        <div class="title" id="approveTitle">Approve Request</div>
+        <div class="year-select">
+          <label for="yearSel" class="muted" id="yearLabel" style="color:var(--muted)">Year</label>
+          <select id="yearSel"></select>
+        </div>
+      </div>
+      <div class="cards" id="cards"></div>
+    </main>
+
+    <!-- Right panel -->
+    <aside class="right">
+      <div class="panel-title">
+        <div class="chip" id="allReq">All Requests ★</div>
+      </div>
+      <div class="filter-list" id="filters">
+        <!-- buttons injected -->
+      </div>
+    </aside>
+  </div>
+
+  <footer style="margin-top:18px;color:var(--muted);font-size:13px">
+    This is a static, offline prototype. No data is sent anywhere.
+  </footer>
+</div>
+
+<script>
+const $ = (s, el=document)=>el.querySelector(s);
+const $$ = (s, el=document)=>[...el.querySelectorAll(s)];
+
+// --------- Mock Data ----------
+const T = {
+  en:{
+    appTitle:"Name app : ITAM (IT Asset Management)",
+    subtitle:"Home page of the app: Dashboard for User",
+    navDashboard:"Dashboard",
+    navItemReq:"Item Req.",
+    approveTitle:"Approve Request",
+    allRequests:"All Requests ★",
+    year:"Year",
+    theme:"ColorTheme:",
+    language:"Language:",
+    filters:["Pending for me","Re-Submitted Req.","Reject Requests","Approved Req.","Deleted Req."],
+    status:{
+      pending:"Pending",
+      resub:"Re-submitted",
+      approved:"Approved",
+      rejected:"Rejected",
+      deleted:"Deleted"
+    }
+  },
+  th:{
+    appTitle:"ชื่อแอป : ITAM (ระบบบริหารครุภัณฑ์ไอที)",
+    subtitle:"หน้าแรกของแอป : แดชบอร์ดสำหรับผู้ใช้",
+    navDashboard:"แดชบอร์ด",
+    navItemReq:"คำร้องขออุปกรณ์",
+    approveTitle:"รายการรออนุมัติ",
+    allRequests:"รายการทั้งหมด ★",
+    year:"ปี",
+    theme:"ธีมสี:",
+    language:"ภาษา:",
+    filters:["รอฉันอนุมัติ","ส่งใหม่อีกครั้ง","ถูกปฏิเสธ","อนุมัติแล้ว","ลบแล้ว"],
+    status:{
+      pending:"รอดำเนินการ",
+      resub:"ส่งใหม่",
+      approved:"อนุมัติแล้ว",
+      rejected:"ถูกปฏิเสธ",
+      deleted:"ลบแล้ว"
+    }
+  }
+};
+
+const items=[
+  {id:"ITAM01-020508", year:2025, title:"Laptop Lenovo Thinkpad X405", sn:"OHKXZLW", qty:1, icon:"laptop",
+    detail:"Attach images of cost pieces.", status:"approved", category:"Approved Req."},
+  {id:"ITAM09-020508", year:2025, title:"Charger Lenovo Type-C 15W", sn:"OXC123", qty:1, icon:"plug",
+    detail:"Type-C 65W.", status:"approved", category:"Approved Req."},
+  {id:"ITAM03-020508", year:2025, title:"Mouse Logitech M141", sn:"LOM74708", qty:1, icon:"mouse",
+    detail:"Waiting for manager.", status:"resub", category:"Re-Submitted Req."},
+  {id:"ITAM05-010120", year:2024, title:"Monitor Dell 24\"", sn:"DL24A11", qty:1, icon:"monitor",
+    detail:"User pending.", status:"pending", category:"Pending for me"},
+  {id:"ITAM07-031203", year:2023, title:"Keyboard Keychron K2", sn:"K2SN9", qty:1, icon:"keyboard",
+    detail:"Rejected because of budget.", status:"rejected", category:"Reject Requests"}
+];
+
+const years = [...new Set(items.map(i=>i.year))].sort((a,b)=>b-a);
+
+// --------- State ----------
+const state = {
+  lang:"th",
+  year:years[0],
+  filter:null // null = all
+};
+
+// --------- UI Bindings ----------
+function iconSvg(name){
+  const paths={
+    laptop:'<rect x="3" y="5" width="18" height="11" rx="2"/><path d="M2 18h20"/>',
+    plug:'<path d="M9 7v6M15 7v6M7 13h10M12 19v-6M6 19h12" />',
+    mouse:'<rect x="7" y="3" width="10" height="18" rx="5"/><path d="M12 3v6"/>',
+    monitor:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+    keyboard:'<rect x="3" y="6" width="18" height="10" rx="2"/><path d="M7 9h1M10 9h1M13 9h1M16 9h1M6 12h12"/>',
+  };
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">${paths[name]||paths.laptop}</svg>`;
+}
+
+function applyLang(){
+  const L=T[state.lang];
+  $("#appTitle").textContent=L.appTitle;
+  $("#subtitle").textContent=L.subtitle;
+  $("#navDashboard").textContent=L.navDashboard;
+  $("#navItemReq").textContent=L.navItemReq;
+  $("#approveTitle").textContent=L.approveTitle;
+  $("#allReq").textContent=L.allRequests;
+  $("#yearLabel").textContent=L.year;
+  $("#labelTheme").textContent=L.theme;
+  $("#labelLang").textContent=L.language;
+
+  const fl = $("#filters");
+  fl.innerHTML="";
+  T.en.filters.forEach((eng, idx)=>{
+    const th = T.th.filters[idx];
+    const label = state.lang==="th" ? th : eng;
+    const btn = document.createElement("button");
+    btn.textContent = label;
+    btn.dataset.filter = eng; // keep english key for category match
+    if(state.filter===eng) btn.classList.add("active");
+    btn.onclick=()=>{ state.filter = (state.filter===eng? null : eng); render(); };
+    fl.appendChild(btn);
+  });
+  render();
+}
+
+function render(){
+  // year options
+  const sel=$("#yearSel");
+  sel.innerHTML = years.map(y=>`<option value="${y}" ${y===state.year?"selected":""}>${y}</option>`).join("");
+
+  // cards
+  const L=T[state.lang];
+  const holder=$("#cards");
+  holder.innerHTML="";
+  const filtered = items.filter(i => (i.year===state.year) && (!state.filter || i.category===state.filter));
+  if(filtered.length===0){
+    const empty=document.createElement("div");
+    empty.style.color="var(--muted)";
+    empty.style.padding="14px";
+    empty.textContent = state.lang==="th" ? "ไม่มีรายการในเงื่อนไขนี้" : "No items for this view.";
+    holder.appendChild(empty);
+  }
+  filtered.forEach(i=>{
+    const card=document.createElement("div");
+    const statusClass = (i.status==="approved")? "ok" : (i.status==="pending"||i.status==="resub")? "warn" : "";
+    card.className = `card ${statusClass}`;
+    card.innerHTML = `
+      <div class="icon">${iconSvg(i.icon)}</div>
+      <div class="meta">
+        <b>Ticket : ${i.id}</b>
+        <div>${i.title} — <small>SN : ${i.sn}, Qty : ${i.qty}</small></div>
+        <small>${i.detail}</small>
+      </div>
+      <span class="badge">${ (L.status[i.status] || i.status) }</span>
+    `;
+    holder.appendChild(card);
+  });
+
+  // mark active filter button
+  $$(".filter-list button").forEach(b=>b.classList.toggle("active", b.dataset.filter===state.filter));
+}
+
+// events
+$("#yearSel").addEventListener("change", e=>{ state.year=+e.target.value; render(); });
+$("#themeLight").onclick=()=>{ document.body.classList.remove("dark"); $("#themeLight").classList.add("active"); $("#themeDark").classList.remove("active"); };
+$("#themeDark").onclick=()=>{ document.body.classList.add("dark"); $("#themeDark").classList.add("active"); $("#themeLight").classList.remove("active"); };
+$("#langTH").onclick=()=>{ state.lang="th"; $("#langTH").classList.add("active"); $("#langEN").classList.remove("active"); applyLang(); };
+$("#langEN").onclick=()=>{ state.lang="en"; $("#langEN").classList.add("active"); $("#langTH").classList.remove("active"); applyLang(); };
+
+applyLang();
+</script>
+</body>
+</html>
