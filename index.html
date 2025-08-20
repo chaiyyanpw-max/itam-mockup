@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITAM · Dashboard for User — Prototype</title>
+<link rel="icon" href="data:,">
+<style>
+  :root{
+    --bg:#f7f9fc;
+    --panel:#ffffff;
+    --muted:#667085;
+    --text:#111827;
+    --line:#e5e7eb;
+    --shadow:0 6px 18px rgba(16, 24, 40, 0.06);
+    --chip:#eef2ff;
+
+    --card-green:#e9fbf0;
+    --card-yellow:#fff8e6;
+    --card-red:#ffe9ea;
+    --card-blue:#eef1ff;
+
+    --chip-green:#d1fae5;
+    --chip-yellow:#fef3c7;
+    --chip-red:#fee2e2;
+    --chip-blue:#e0e7ff;
+
+    --accent:#2563eb;
+  }
+  [data-theme="dark"]{
+    --bg:#0f1420;
+    --panel:#101828;
+    --muted:#98a2b3;
+    --text:#e5e7eb;
+    --line:#1f2937;
+    --shadow:0 6px 18px rgba(0,0,0,0.35);
+
+    --card-green:#123323;
+    --card-yellow:#2f2a12;
+    --card-red:#35171b;
+    --card-blue:#181c35;
+
+    --chip-green:#1d3e33;
+    --chip-yellow:#3b3414;
+    --chip-red:#3b1c1f;
+    --chip-blue:#1f2749;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:15px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Thai', sans-serif}
+  a{color:var(--accent);text-decoration:none}
+
+  .app{min-height:100%;display:grid;grid-template-columns:260px 1fr}
+  aside{border-right:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:14px}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:700}
+  .brand .home{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#4f46e5,#06b6d4)}
+  .nav{display:grid;gap:10px}
+  .nav .btn{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:var(--shadow);cursor:pointer}
+  .nav .btn .ico{width:18px;height:18px;opacity:0.8}
+
+  .grow{flex:1}
+
+  header{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:14px 18px;position:sticky;top:0;background:var(--bg);z-index:5}
+  .right{margin-left:auto;display:flex;gap:10px;align-items:center}
+  .circle{width:36px;height:36px;border-radius:999px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;box-shadow:var(--shadow);font-weight:800}
+  .user{display:flex;align-items:center;gap:10px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel);box-shadow:var(--shadow)}
+  .user .meta{line-height:1.1}
+  .user .name{font-weight:700}
+  .user .role{font-size:12px;color:var(--muted)}
+
+  main{padding:20px 28px 40px}
+
+  .h1{font-weight:800;font-size:20px;margin:8px 0 18px}
+  .sub{color:var(--muted);font-size:13px;margin-top:-10px;margin-bottom:10px}
+
+  .toolbar{display:flex;gap:12px;align-items:center;margin:6px 0 18px;flex-wrap:wrap}
+  .select{position:relative}
+  .select button{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:var(--shadow);min-width:130px;cursor:pointer}
+  .menu{position:absolute;top:44px;left:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);min-width:220px;display:none;z-index:20}
+  .menu.open{display:block}
+  .menu .opt{padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer}
+  .menu .opt:last-child{border-bottom:none}
+  .muted{color:var(--muted)}
+
+  .cards{display:grid;gap:14px;max-width:980px}
+  .card{display:grid;grid-template-columns:auto 1fr auto;gap:14px;padding:16px;border-radius:16px;border:1px solid var(--line)}
+  .card .icon{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;background:rgba(0,0,0,0.08)}
+  [data-theme="dark"] .card .icon{background:rgba(255,255,255,0.08)}
+
+  .badge{display:inline-block;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;border:1px solid var(--line)}
+  .card.green{background:var(--card-green)}
+  .card.yellow{background:var(--card-yellow)}
+  .card.red{background:var(--card-red)}
+  .card.blue{background:var(--card-blue)}
+  .badge.green{background:var(--chip-green)}
+  .badge.yellow{background:var(--chip-yellow)}
+  .badge.red{background:var(--chip-red)}
+  .badge.blue{background:var(--chip-blue)}
+
+  .panel{position:relative}
+  .dropdown{position:absolute;top:46px;right:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);min-width:280px;display:none;z-index:30;padding:12px}
+  .dropdown.open{display:block}
+  .section-title{font-size:12px;color:var(--muted);margin:6px 0 8px}
+  .chip-row{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{border:1px solid var(--line);background:#f2f4f7;border-radius:999px;padding:8px 12px;font-weight:600;cursor:pointer}
+  [data-theme="dark"] .chip{background:#0f172a}
+  .chip.active{outline:2px solid var(--accent);}
+
+  footer{border-top:1px solid var(--line);padding:12px 18px;color:var(--muted);display:flex;justify-content:space-between}
+
+  @media (max-width: 980px){
+    .app{grid-template-columns:1fr}
+    aside{display:none}
+    .user .name{display:none}
+    .user .role{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <aside>
+    <div class="brand"><div class="home"></div> <span data-i="brand">ITAM · Dashboard for User</span></div>
+
+    <div class="nav">
+      <div class="btn"><div class="ico">🏠</div><span data-i="navDash">Dashboard</span></div>
+      <div class="btn"><div class="ico">📄</div><span data-i="navItem">Item Req.</span></div>
+    </div>
+
+    <!-- Removed color/language boxes and bottom-left icons per request -->
+  </aside>
+
+  <section>
+    <header>
+      <div class="brand"><div class="home"></div> ITAM · <span data-i="dash">Dashboard for User</span></div>
+      <div class="right">
+        <div class="circle" title="Notifications">🔔</div>
+
+        <!-- Settings dropdown contains Theme + Language -->
+        <div class="panel">
+          <div class="circle" id="settingsBtn" title="Settings">⚙️</div>
+          <div class="dropdown" id="settingsMenu">
+            <div class="section">
+              <div class="section-title" data-i="colorTheme">Color theme</div>
+              <div class="chip-row">
+                <div class="chip" id="theme-dark" data-i="black">Black</div>
+                <div class="chip active" id="theme-light" data-i="white">White</div>
+              </div>
+            </div>
+            <div class="section" style="margin-top:10px">
+              <div class="section-title" data-i="lang">Language</div>
+              <div class="chip-row">
+                <div class="chip active" id="lang-th">TH</div>
+                <div class="chip" id="lang-en">EN</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User profile (Jack Reacher, IT Support) -->
+        <div class="user">
+          <div class="circle" style="width:30px;height:30px">JR</div>
+          <div class="meta">
+            <div class="name">Jack Reacher</div>
+            <div class="role">IT Support</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="h1" data-i="title">Approve Request</div>
+      <div class="sub"><span class="muted" data-i="subtitle">User view</span></div>
+
+      <div class="toolbar">
+        <div class="select" id="yearSel">
+          <button id="yearBtn"><span id="yearLabel">2025</span> ▾</button>
+          <div class="menu" id="yearMenu"></div>
+        </div>
+        <div class="select" id="typeSel">
+          <button id="typeBtn"><span id="typeLabel">All Requests</span> ▾</button>
+          <div class="menu" id="typeMenu"></div>
+        </div>
+      </div>
+
+      <div class="cards" id="cards"></div>
+    </main>
+
+    <footer>
+      <div data-i="footerLeft">IT Asset Management · Prototype</div>
+      <div class="muted">v0.2</div>
+    </footer>
+  </section>
+</div>
+
+<script>
+const i18n = {
+  th: {
+    brand:"ITAM · แดชบอร์ดผู้ใช้",
+    dash:"แดชบอร์ดผู้ใช้",
+    navDash:"แดชบอร์ด",
+    navItem:"คำขอไอเท็ม",
+    colorTheme:"ธีมสี",
+    black:"ดำ",
+    white:"ขาว",
+    lang:"ภาษา",
+    title:"อนุมัติคำขอ",
+    subtitle:"มุมมองผู้ใช้",
+    all:"คำขอทั้งหมด",
+    pending:"รอดำเนินการของฉัน",
+    resub:"คำขอส่งใหม่",
+    rejected:"คำขอถูกปฏิเสธ",
+    approved:"คำขออนุมัติแล้ว",
+    deleted:"ลบแล้ว",
+    approvedChip:"อนุมัติแล้ว",
+    pendingChip:"รอดำเนินการ",
+    rejectedChip:"ถูกปฏิเสธ",
+    resubChip:"ส่งใหม่",
+    footerLeft:"ระบบจัดการครุภัณฑ์ · ต้นแบบ",
+    noData:"ไม่พบคำขอตามเงื่อนไขที่เลือก"
+  },
+  en: {
+    brand:"ITAM · Dashboard for User",
+    dash:"Dashboard for User",
+    navDash:"Dashboard",
+    navItem:"Item Req.",
+    colorTheme:"Color theme",
+    black:"Black",
+    white:"White",
+    lang:"Language",
+    title:"Approve Request",
+    subtitle:"User view",
+    all:"All Requests",
+    pending:"Pending for me",
+    resub:"Re-Submitted Req.",
+    rejected:"Rejected Requests",
+    approved:"Approved Req.",
+    deleted:"Deleted Req.",
+    approvedChip:"Approved",
+    pendingChip:"Pending",
+    rejectedChip:"Rejected",
+    resubChip:"Re-Submitted",
+    footerLeft:"IT Asset Management · Prototype",
+    noData:"No request found for your filter."
+  }
+};
+
+const data = [
+  {ticket:"ITAM01-202906", item:"Lenovo ThinkPad X1 Gen5", qty:1, sn:"GMXK2W", status:"approved", created:"2025-08-15", approved:"2025-08-25"},
+  {ticket:"ITAM02-202908", item:"Lenovo 65W USB-C", qty:1, sn:"C123", status:"pending", created:"2025-08-16"},
+  {ticket:"ITAM03-202908", item:"Logitech M331", qty:1, sn:"L0M478B", status:"rejected", created:"2025-08-17"},
+  {ticket:"ITAM05-202903", item:"Anker GaN 45W", qty:1, sn:"ANK45", status:"resub", created:"2025-03-02"},
+];
+
+const statusStyle = {
+  approved: {card:"green", chip:"green", icon:"✅"},
+  pending:  {card:"yellow",chip:"yellow",icon:"🛠️"},
+  rejected: {card:"red",   chip:"red",   icon:"⛔"},
+  resub:    {card:"blue",  chip:"blue",  icon:"🔁"},
+};
+
+// Year list with 2024 enforced
+const yearsSet = new Set(data.map(d=>new Date(d.created).getFullYear()));
+yearsSet.add(2024);
+const years = Array.from(yearsSet).sort((a,b)=>b-a);
+
+let state = {year: years[0], type:"all", lang:"th", theme:"light"};
+
+function t(key){ return i18n[state.lang][key]; }
+
+function localizeStatic(){
+  document.querySelectorAll("[data-i]").forEach(el=>{
+    const key = el.getAttribute("data-i");
+    el.textContent = t(key);
+  });
+  document.getElementById("typeLabel").textContent = t(state.type);
+}
+
+function buildMenus(){
+  const yearMenu = document.getElementById("yearMenu");
+  yearMenu.innerHTML = years.map(y=>`<div class="opt" data-year="${y}">${y}</div>`).join("");
+  yearMenu.addEventListener("click", (e)=>{
+    const el = e.target.closest(".opt"); if(!el) return;
+    state.year = +el.dataset.year;
+    document.getElementById("yearLabel").textContent = state.year;
+    yearMenu.classList.remove("open");
+    renderCards();
+  });
+
+  const typeMenu = document.getElementById("typeMenu");
+  const buildTypeMenu = ()=>{
+    typeMenu.innerHTML = ["all","pending","resub","rejected","approved","deleted"]
+      .map((k)=>`<div class="opt" data-type="${k}">${t(k)}</div>`).join("");
+  };
+  buildTypeMenu();
+  typeMenu.addEventListener("click", (e)=>{
+    const el = e.target.closest(".opt"); if(!el) return;
+    state.type = el.dataset.type;
+    document.getElementById("typeLabel").textContent = t(state.type);
+    typeMenu.classList.remove("open");
+    renderCards();
+  });
+
+  document.getElementById("yearBtn").onclick = ()=>yearMenu.classList.toggle("open");
+  document.getElementById("typeBtn").onclick = ()=>typeMenu.classList.toggle("open");
+  document.addEventListener("click", (e)=>{
+    if(!e.target.closest("#yearSel")) yearMenu.classList.remove("open");
+    if(!e.target.closest("#typeSel")) typeMenu.classList.remove("open");
+    if(!e.target.closest("#settingsBtn") && !e.target.closest("#settingsMenu")){
+      document.getElementById("settingsMenu").classList.remove("open");
+    }
+  });
+
+  buildMenus.buildTypeMenu = buildTypeMenu;
+}
+
+function renderCards(){
+  const wrap = document.getElementById("cards");
+  const out = data
+    .filter(d=>new Date(d.created).getFullYear()===state.year)
+    .filter(d=> state.type==="all" ? true : d.status===state.type)
+    .map(d=>{
+      const st = statusStyle[d.status];
+      const chipLabel = d.status==="approved"?t("approvedChip"):
+                        d.status==="pending"?t("pendingChip"):
+                        d.status==="rejected"?t("rejectedChip"):
+                        t("resubChip");
+      return `<div class="card ${st.card}">
+        <div class="icon">${st.icon}</div>
+        <div>
+          <div style="font-weight:800">Ticket: ${d.ticket}</div>
+          <div class="muted">${d.item} · ${d.qty} Unit · SN: ${d.sn}</div>
+          <div class="muted" style="margin-top:6px">
+            <span class="badge ${st.chip}">${chipLabel}</span>
+            ${d.status==="approved"
+              ? `<span class="muted" style="margin-left:10px">Approved: ${d.approved}</span>`
+              : ""}
+            <span class="muted" style="margin-left:10px">Created on: ${d.created}</span>
+          </div>
+        </div>
+        <div></div>
+      </div>`;
+    }).join("");
+  wrap.innerHTML = out || `<div class="muted">${t("noData")}</div>`;
+}
+
+function applyTheme(){
+  document.documentElement.dataset.theme = (state.theme==="dark" ? "dark" : "");
+  document.getElementById("theme-dark").classList.toggle("active", state.theme==="dark");
+  document.getElementById("theme-light").classList.toggle("active", state.theme!=="dark");
+}
+
+function bindToggles(){
+  // Settings dropdown
+  const btn = document.getElementById("settingsBtn");
+  const menu = document.getElementById("settingsMenu");
+  btn.onclick = ()=>menu.classList.toggle("open");
+
+  // Theme toggles
+  document.getElementById("theme-dark").onclick = ()=>{ state.theme="dark"; applyTheme(); };
+  document.getElementById("theme-light").onclick = ()=>{ state.theme="light"; applyTheme(); };
+
+  // Language toggles
+  document.getElementById("lang-th").onclick = ()=>{
+    state.lang="th";
+    document.getElementById("lang-th").classList.add("active");
+    document.getElementById("lang-en").classList.remove("active");
+    localizeStatic(); renderCards(); buildMenus.buildTypeMenu();
+  };
+  document.getElementById("lang-en").onclick = ()=>{
+    state.lang="en";
+    document.getElementById("lang-en").classList.add("active");
+    document.getElementById("lang-th").classList.remove("active");
+    localizeStatic(); renderCards(); buildMenus.buildTypeMenu();
+  };
+}
+
+function init(){
+  document.getElementById("yearLabel").textContent = state.year;
+  buildMenus();
+  bindToggles();
+  applyTheme();
+  localizeStatic();
+  renderCards();
+}
+
+init();
+</script>
+</body>
+</html>
