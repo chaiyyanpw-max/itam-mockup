@@ -6,180 +6,216 @@
 <title>ITAM · Dashboard</title>
 <link rel="icon" href="data:,">
 <style>
- :root{
-   --bg:#f7f9fc; --panel:#ffffff; --muted:#667085; --text:#111827;
-   --line:#e5e7eb; --shadow:0 6px 18px rgba(16,24,40,.06); --accent:#2563eb;
-   --green:#e9fbf0; --yellow:#fff8e6; --red:#ffe9ea; --blue:#eef1ff;
-   --chipG:#d1fae5; --chipY:#fef3c7; --chipR:#fee2e2; --chipB:#e0e7ff;
- }
- [data-theme="dark"]{
-   --bg:#0f1420; --panel:#101828; --muted:#98a2b3; --text:#e5e7eb; --line:#1f2937;
-   --green:#123323; --yellow:#2f2a12; --red:#35171b; --blue:#181c35;
-   --chipG:#1d3e33; --chipY:#3b3414; --chipR:#3b1c1f; --chipB:#1f2749;
- }
- *{box-sizing:border-box}
- html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Thai',sans-serif}
- a{color:var(--accent);text-decoration:none}
- .app{min-height:100%;display:grid;grid-template-columns:260px 1fr}
- aside{border-right:1px solid var(--line);padding:16px}
- .brand{display:flex;gap:8px;align-items:center;font-weight:800}
- .home{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#4f46e5,#06b6d4)}
- .nav{margin-top:12px}
- .nav a{display:flex;gap:10px;align-items:center;margin:8px 0;padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);color:var(--text);text-decoration:none}
- .nav a.active{outline:2px solid var(--accent)}
- header{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:12px 18px;background:var(--bg);position:sticky;top:0;z-index:5}
- .right{margin-left:auto;display:flex;gap:10px;align-items:center}
- .circle{width:36px;height:36px;border-radius:999px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;box-shadow:var(--shadow);font-weight:800}
- .user{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 10px;box-shadow:var(--shadow)}
- .name{font-weight:700} .role{font-size:12px;color:var(--muted)}
- .panel{position:relative}
- .dropdown{position:absolute;top:46px;right:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);min-width:280px;display:none;z-index:30;padding:12px}
- .dropdown.open{display:block}
- .section-title{font-size:12px;color:var(--muted);margin:6px 0 8px}
- .chip-row{display:flex;gap:8px;flex-wrap:wrap}
- .chip{border:1px solid var(--line);background:#f2f4f7;border-radius:999px;padding:8px 12px;font-weight:600;cursor:pointer}
- [data-theme="dark"] .chip{background:#0f172a}
- .chip.active{outline:2px solid var(--accent)}
- main{padding:20px 28px 40px}
- .h1{font-weight:800;font-size:20px;margin:8px 0 6px}
- .sub{color:var(--muted);font-size:13px;margin-bottom:10px}
- .toolbar{display:flex;gap:12px;align-items:center;margin:8px 0 18px;flex-wrap:wrap}
- .select{position:relative}
- .select button{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:var(--shadow);min-width:130px;cursor:pointer}
- .menu{position:absolute;top:44px;left:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);min-width:220px;display:none;z-index:20}
- .menu.open{display:block}
- .menu .opt{padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer}
- .menu .opt:last-child{border-bottom:none}
- .cards{display:grid;gap:14px;max-width:980px}
- .card{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:16px;border-radius:16px;border:1px solid var(--line)}
- .icon{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;background:rgba(0,0,0,.08)}
- [data-theme="dark"] .icon{background:rgba(255,255,255,.08)}
- .badge{display:inline-block;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;border:1px solid var(--line);margin-right:8px}
- .green{background:var(--green)} .yellow{background:var(--yellow)} .red{background:var(--red)} .blue{background:var(--blue)}
- .bG{background:var(--chipG)} .bY{background:var(--chipY)} .bR{background:var(--chipR)} .bB{background:var(--chipB)}
- footer{border-top:1px solid var(--line);padding:12px 18px;color:var(--muted);display:flex;justify-content:space-between}
- @media(max-width:980px){.app{grid-template-columns:1fr} aside{display:none}}
+  :root{
+    --bg:#f7f9fc; --panel:#ffffff; --muted:#667085; --text:#111827;
+    --line:#e5e7eb; --shadow:0 6px 18px rgba(16,24,40,.06); --accent:#2563eb;
+    --green:#e9fbf0; --yellow:#fff8e6; --red:#ffe9ea; --blue:#eef1ff;
+    --chipG:#d1fae5; --chipY:#fef3c7; --chipR:#fee2e2; --chipB:#e0e7ff;
+  }
+  [data-theme="dark"]{
+    --bg:#0f1420; --panel:#101828; --muted:#98a2b3; --text:#e5e7eb; --line:#1f2937;
+    --green:#123323; --yellow:#2f2a12; --red:#35171b; --blue:#181c35;
+    --chipG:#1d3e33; --chipY:#3b3414; --chipR:#3b1c1f; --chipB:#1f2749;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Thai',sans-serif}
+  a{color:var(--accent);text-decoration:none}
+
+  .app{min-height:100%;display:grid;grid-template-columns:260px 1fr}
+  aside{border-right:1px solid var(--line);padding:16px}
+  .brand{display:flex;gap:8px;align-items:center;font-weight:800}
+  .home{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#4f46e5,#06b6d4)}
+  .nav{margin-top:12px}
+  .nav a{display:flex;gap:10px;align-items:center;margin:8px 0;padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);color:var(--text);text-decoration:none}
+  .nav a.active{outline:2px solid var(--accent)}
+
+  header{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:12px 18px;background:var(--bg);position:sticky;top:0;z-index:5}
+  .right{margin-left:auto;display:flex;gap:10px;align-items:center}
+  .circle{width:36px;height:36px;border-radius:999px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;box-shadow:var(--shadow);font-weight:800}
+  .user{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 10px;box-shadow:var(--shadow)}
+  .name{font-weight:700} .role{font-size:12px;color:var(--muted)}
+
+  .panel{position:relative}
+  .dropdown{position:absolute;top:46px;right:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);min-width:280px;display:none;z-index:30;padding:12px}
+  .dropdown.open{display:block}
+  .section-title{font-size:12px;color:var(--muted);margin:6px 0 8px}
+  .chip-row{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{border:1px solid var(--line);background:#f2f4f7;border-radius:999px;padding:8px 12px;font-weight:600;cursor:pointer}
+  [data-theme="dark"] .chip{background:#0f172a}
+  .chip.active{outline:2px solid var(--accent)}
+
+  main{padding:20px 28px 40px}
+  .h1{font-weight:800;font-size:20px;margin:8px 0 6px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:10px}
+
+  .toolbar{display:flex;gap:12px;align-items:center;margin:8px 0 18px;flex-wrap:wrap}
+  .select{position:relative}
+  .select button{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:var(--shadow);min-width:130px;cursor:pointer}
+  .menu{position:absolute;top:44px;left:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);min-width:220px;display:none;z-index:20}
+  .menu.open{display:block}
+  .menu .opt{padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer}
+  .menu .opt:last-child{border-bottom:none}
+
+  .cards{display:grid;gap:14px;max-width:980px}
+  .card{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:16px;border-radius:16px;border:1px solid var(--line)}
+  .icon{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;background:rgba(0,0,0,.08)}
+  [data-theme="dark"] .icon{background:rgba(255,255,255,.08)}
+  .badge{display:inline-block;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;border:1px solid var(--line);margin-right:8px}
+  .green{background:var(--green)} .yellow{background:var(--yellow)} .red{background:var(--red)} .blue{background:var(--blue)}
+  .bG{background:var(--chipG)} .bY{background:var(--chipY)} .bR{background:var(--chipR)} .bB{background:var(--chipB)}
+
+  footer{border-top:1px solid var(--line);padding:12px 18px;color:var(--muted);display:flex;justify-content:space-between}
+  @media(max-width:980px){.app{grid-template-columns:1fr} aside{display:none}}
 </style>
 </head>
 <body>
 <div class="app">
-<aside>
-<div class="brand"><div class="home"></div> <span>ITAM · Dashboard for User</span></div>
-<nav class="nav">
-<a class="active" href="./index.html"><div>🏠</div><span>Dashboard</span></a>
-<a href="./item-request.html"><div>📄</div><span>Item Request</span></a>
-</nav>
-</aside>
-<section>
-<!-- Fixed top-right menu on every page -->
-<header>
-<div class="brand"><div class="home"></div> ITAM · Dashboard for User</div>
-<div class="right">
-<div class="circle" title="Notifications">🔔</div>
-<div class="panel">
-<div class="circle" id="settingsBtn" title="Settings">⚙️</div>
-<div class="dropdown" id="settingsMenu">
-<div class="section-title">Color theme</div>
-<div class="chip-row">
-<div class="chip" id="theme-dark">Black</div>
-<div class="chip" id="theme-light">White</div>
+  <aside>
+    <div class="brand"><div class="home"></div> <span data-i="brand">ITAM · Dashboard for User</span></div>
+    <nav class="nav">
+      <a class="active" href="./index.html"><div>🏠</div><span data-i="navDash">Dashboard</span></a>
+      <a href="./item-request.html"><div>📄</div><span data-i="navItem">Item Request</span></a>
+    </nav>
+  </aside>
+
+  <section>
+    <!-- Fixed top-right menu -->
+    <header>
+      <div class="brand"><div class="home"></div> ITAM · <span data-i="dash">Dashboard for User</span></div>
+      <div class="right">
+        <div class="circle" title="Notifications">🔔</div>
+
+        <div class="panel">
+          <div class="circle" id="settingsBtn" title="Settings">⚙️</div>
+          <div class="dropdown" id="settingsMenu">
+            <div class="section-title" data-i="colorTheme">Color theme</div>
+            <div class="chip-row">
+              <div class="chip" id="theme-dark" data-i="black">Black</div>
+              <div class="chip" id="theme-light" data-i="white">White</div>
+            </div>
+            <div class="section-title" style="margin-top:10px" data-i="language">Language</div>
+            <div class="chip-row">
+              <div class="chip" id="lang-th">TH</div>
+              <div class="chip" id="lang-en">EN</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="user" title="Account">
+          <div class="circle" style="width:30px;height:30px">JR</div>
+          <div><div class="name">Jack Reacher</div><div class="role">IT Support</div></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="h1" data-i="titleDash">Approve Request</div>
+      <div class="sub"><span class="muted" data-i="subtitleDash">User view</span></div>
+
+      <div class="toolbar">
+        <div class="select" id="yearSel">
+          <button id="yearBtn"><span id="yearLabel">2025</span> ▾</button>
+          <div class="menu" id="yearMenu"></div>
+        </div>
+        <div class="select" id="typeSel">
+          <button id="typeBtn"><span id="typeLabel">All Requests</span> ▾</button>
+          <div class="menu" id="typeMenu"></div>
+        </div>
+      </div>
+
+      <div class="cards" id="cards"></div>
+    </main>
+    <footer>
+      <div data-i="footerLeft">IT Asset Management · Prototype</div>
+      <div class="muted">v1.1</div>
+    </footer>
+  </section>
 </div>
-<div class="section-title" style="margin-top:10px">Language</div>
-<div class="chip-row">
-<div class="chip" id="lang-th">TH</div>
-<div class="chip" id="lang-en">EN</div>
-</div>
-</div>
-</div>
-<div class="user" title="Account">
-<div class="circle" style="width:30px;height:30px">JR</div>
-<div><div class="name">Jack Reacher</div><div class="role">IT Support</div></div>
-</div>
-</div>
-</header>
-<main>
-<div class="h1">Approve Request</div>
-<div class="sub"><span class="muted">User view</span></div>
-<div class="toolbar">
-<div class="select" id="yearSel">
-<button id="yearBtn"><span id="yearLabel">2025</span> ▾</button>
-<div class="menu" id="yearMenu"></div>
-</div>
-<div class="select" id="typeSel">
-<button id="typeBtn"><span id="typeLabel">All Requests</span> ▾</button>
-<div class="menu" id="typeMenu"></div>
-</div>
-</div>
-<div class="cards" id="cards"></div>
-</main>
-<footer>
-<div>IT Asset Management · Prototype</div>
-<div class="muted">v1.0</div>
-</footer>
-</section>
-</div>
+
 <script>
+/* ==== i18n + theme (shared) ==== */
 const I18N = {
- th:{all:"คำขอทั้งหมด",pending:"รอดำเนินการของฉัน",resub:"คำขอส่งใหม่",rejected:"คำขอถูกปฏิเสธ",approved:"คำขออนุมัติแล้ว",deleted:"ลบแล้ว",
-     approvedChip:"อนุมัติแล้ว",pendingChip:"รอดำเนินการ",rejectedChip:"ถูกปฏิเสธ",resubChip:"ส่งใหม่",noData:"ไม่พบคำขอตามเงื่อนไขที่เลือก"},
- en:{all:"All Requests",pending:"Pending for me",resub:"Re-Submitted Req.",rejected:"Rejected Requests",approved:"Approved Req.",deleted:"Deleted Req.",
-     approvedChip:"Approved",pendingChip:"Pending",rejectedChip:"Rejected",resubChip:"Re-Submitted",noData:"No request found for your filter."}
+  th:{brand:"ITAM · แดชบอร์ดผู้ใช้",dash:"แดชบอร์ดผู้ใช้",navDash:"แดชบอร์ด",navItem:"คำขอไอเท็ม",
+      colorTheme:"ธีมสี",black:"ดำ",white:"ขาว",language:"ภาษา",
+      titleDash:"อนุมัติคำขอ",subtitleDash:"มุมมองผู้ใช้",
+      all:"คำขอทั้งหมด",pending:"รอดำเนินการของฉัน",resub:"คำขอส่งใหม่",rejected:"คำขอถูกปฏิเสธ",approved:"คำขออนุมัติแล้ว",deleted:"ลบแล้ว",
+      approvedChip:"อนุมัติแล้ว",pendingChip:"รอดำเนินการ",rejectedChip:"ถูกปฏิเสธ",resubChip:"ส่งใหม่",
+      footerLeft:"ระบบจัดการครุภัณฑ์ · ต้นแบบ",noData:"ไม่พบคำขอตามเงื่อนไขที่เลือก"},
+  en:{brand:"ITAM · Dashboard for User",dash:"Dashboard for User",navDash:"Dashboard",navItem:"Item Request",
+      colorTheme:"Color theme",black:"Black",white:"White",language:"Language",
+      titleDash:"Approve Request",subtitleDash:"User view",
+      all:"All Requests",pending:"Pending for me",resub:"Re-Submitted Req.",rejected:"Rejected Requests",approved:"Approved Req.",deleted:"Deleted Req.",
+      approvedChip:"Approved",pendingChip:"Pending",rejectedChip:"Rejected",resubChip:"Re-Submitted",
+      footerLeft:"IT Asset Management · Prototype",noData:"No request found for your filter."}
 };
 function gpref(k,f){ try{return localStorage.getItem(k)||f}catch(e){return f} }
 function spref(k,v){ try{localStorage.setItem(k,v)}catch(e){} }
 const STATE={lang:gpref('itam_lang','th'),theme:gpref('itam_theme','light')};
+function t(k){ return I18N[STATE.lang][k]; }
 function applyTheme(){ document.documentElement.dataset.theme = STATE.theme==='dark'?'dark':''; }
-applyTheme();
-document.getElementById('settingsBtn').onclick=()=>document.getElementById('settingsMenu').classList.toggle('open');
-document.addEventListener('click',(e)=>{ if(!e.target.closest('#settingsBtn')&&!e.target.closest('#settingsMenu')) document.getElementById('settingsMenu').classList.remove('open'); });
-document.getElementById('theme-dark').onclick=()=>{STATE.theme='dark';spref('itam_theme','dark');applyTheme()};
-document.getElementById('theme-light').onclick=()=>{STATE.theme='light';spref('itam_theme','light');applyTheme()};
-document.getElementById('lang-th').onclick=()=>spref('itam_lang','th');
-document.getElementById('lang-en').onclick=()=>spref('itam_lang','en');
+function localize(){
+  document.querySelectorAll('[data-i]').forEach(el=>el.textContent=t(el.dataset.i));
+  document.getElementById('typeLabel').textContent = t(DASH.type);
+}
+function bindSettings(){
+  const btn=document.getElementById('settingsBtn'), menu=document.getElementById('settingsMenu');
+  btn.onclick=()=>menu.classList.toggle('open');
+  document.addEventListener('click',(e)=>{ if(!e.target.closest('#settingsBtn')&&!e.target.closest('#settingsMenu')) menu.classList.remove('open'); });
+  document.getElementById('theme-dark').onclick=()=>{STATE.theme='dark';spref('itam_theme','dark');applyTheme()};
+  document.getElementById('theme-light').onclick=()=>{STATE.theme='light';spref('itam_theme','light');applyTheme()};
+  document.getElementById('lang-th').onclick=()=>{STATE.lang='th';spref('itam_lang','th');localize();buildTypeMenu();};
+  document.getElementById('lang-en').onclick=()=>{STATE.lang='en';spref('itam_lang','en');localize();buildTypeMenu();};
+}
+
+/* ==== Dashboard data/cards ==== */
 const DATA=[
- {ticket:"ITAM01-202906", item:"Lenovo ThinkPad X1 Gen5", qty:1, sn:"GMXK2W", status:"approved", created:"2025-08-15", approved:"2025-08-25"},
- {ticket:"ITAM02-202908", item:"Lenovo 65W USB-C", qty:1, sn:"C123", status:"pending", created:"2025-08-16"},
- {ticket:"ITAM03-202908", item:"Logitech M331", qty:1, sn:"L0M478B", status:"rejected", created:"2025-08-17"},
- {ticket:"ITAM05-202903", item:"Anker GaN 45W", qty:1, sn:"ANK45", status:"resub", created:"2025-03-02"}
+  {ticket:"ITAM01-202906", item:"Lenovo ThinkPad X1 Gen5", qty:1, sn:"GMXK2W", status:"approved", created:"2025-08-15", approved:"2025-08-25"},
+  {ticket:"ITAM02-202908", item:"Lenovo 65W USB-C", qty:1, sn:"C123", status:"pending", created:"2025-08-16"},
+  {ticket:"ITAM03-202908", item:"Logitech M331", qty:1, sn:"L0M478B", status:"rejected", created:"2025-08-17"},
+  {ticket:"ITAM05-202903", item:"Anker GaN 45W", qty:1, sn:"ANK45", status:"resub", created:"2025-03-02"}
 ];
 const STY={approved:['green','bG','✅'],pending:['yellow','bY','🛠️'],rejected:['red','bR','⛔'],resub:['blue','bB','🔁']};
 const YEARS=Array.from(new Set(DATA.map(d=>new Date(d.created).getFullYear()).concat([2024]))).sort((a,b)=>b-a);
 const DASH={year:YEARS[0],type:'all'};
-function t(k){const L=gpref('itam_lang','th'); return I18N[L][k]}
-(function buildMenus(){
- const yM=document.getElementById('yearMenu');
- yM.innerHTML=YEARS.map(y=>`<div class="opt" data-year="${y}">${y}</div>`).join('');
- yM.onclick=e=>{const el=e.target.closest('.opt'); if(!el)return; DASH.year=+el.dataset.year; document.getElementById('yearLabel').textContent=DASH.year; yM.classList.remove('open'); renderCards();};
- document.getElementById('yearBtn').onclick=()=>yM.classList.toggle('open');
- const tM=document.getElementById('typeMenu');
- const opts=['all','pending','resub','rejected','approved','deleted'];
- function draw(){ tM.innerHTML=opts.map(k=>`<div class="opt" data-type="${k}">${t(k)}</div>`).join(''); }
- draw();
- tM.onclick=e=>{const el=e.target.closest('.opt'); if(!el)return; DASH.type=el.dataset.type; document.getElementById('typeLabel').textContent=t(DASH.type); tM.classList.remove('open'); renderCards();};
- document.getElementById('typeBtn').onclick=()=>tM.classList.toggle('open');
- document.addEventListener('click',(e)=>{ if(!e.target.closest('#yearSel')) yM.classList.remove('open'); if(!e.target.closest('#typeSel')) tM.classList.remove('open'); });
-})();
-function renderCards(){
- const wrap=document.getElementById('cards');
- const html=DATA
-   .filter(d=>new Date(d.created).getFullYear()===DASH.year)
-   .filter(d=>DASH.type==='all'?true:d.status===DASH.type)
-   .map(d=>{ const [c,b,ico]=STY[d.status]; const chip=d.status==='approved'?t('approvedChip'):d.status==='pending'?t('pendingChip'):d.status==='rejected'?t('rejectedChip'):t('resubChip');
-     return `<div class="card ${c}">
-<div class="icon">${ico}</div>
-<div>
-<div style="font-weight:800">Ticket: ${d.ticket}</div>
-<div style="color:var(--muted)">${d.item} · ${d.qty} Unit · SN: ${d.sn}</div>
-<div style="margin-top:6px;color:var(--muted)">
-<span class="badge ${b}">${chip}</span>
-           ${d.status==='approved'?`<span style="margin-left:10px">Approved: ${d.approved}</span>`:''}
-<span style="margin-left:10px">Created on: ${d.created}</span>
-</div>
-</div>
-</div>`;}).join('');
- wrap.innerHTML = html || `<div style="color:var(--muted)">${t('noData')}</div>`;
+
+function buildMenus(){
+  const yM=document.getElementById('yearMenu'); yM.innerHTML=YEARS.map(y=>`<div class="opt" data-year="${y}">${y}</div>`).join('');
+  yM.onclick=e=>{const el=e.target.closest('.opt'); if(!el)return; DASH.year=+el.dataset.year; document.getElementById('yearLabel').textContent=DASH.year; yM.classList.remove('open'); renderCards();};
+  document.getElementById('yearBtn').onclick=()=>yM.classList.toggle('open');
+
+  window.buildTypeMenu=function(){
+    const tM=document.getElementById('typeMenu');
+    const opts=['all','pending','resub','rejected','approved','deleted'];
+    tM.innerHTML=opts.map(k=>`<div class="opt" data-type="${k}">${t(k)}</div>`).join('');
+    tM.onclick=e=>{const el=e.target.closest('.opt'); if(!el)return; DASH.type=el.dataset.type; document.getElementById('typeLabel').textContent=t(DASH.type); tM.classList.remove('open'); renderCards();};
+  }
+  buildTypeMenu();
+  document.getElementById('typeBtn').onclick=()=>document.getElementById('typeMenu').classList.toggle('open');
+  document.addEventListener('click',(e)=>{ if(!e.target.closest('#yearSel')) yM.classList.remove('open'); if(!e.target.closest('#typeSel')) document.getElementById('typeMenu').classList.remove('open'); });
 }
-renderCards();
+function renderCards(){
+  const wrap=document.getElementById('cards');
+  const html=DATA.filter(d=>new Date(d.created).getFullYear()===DASH.year)
+    .filter(d=>DASH.type==='all'?true:d.status===DASH.type)
+    .map(d=>{ const [c,b,ico]=STY[d.status]; const chip=d.status==='approved'?t('approvedChip'):d.status==='pending'?t('pendingChip'):d.status==='rejected'?t('rejectedChip'):t('resubChip');
+      return `<div class="card ${c}">
+        <div class="icon">${ico}</div>
+        <div>
+          <div style="font-weight:800">Ticket: ${d.ticket}</div>
+          <div style="color:var(--muted)">${d.item} · ${d.qty} Unit · SN: ${d.sn}</div>
+          <div style="margin-top:6px;color:var(--muted)">
+            <span class="badge ${b}">${chip}</span>
+            ${d.status==='approved'?`<span style="margin-left:10px">Approved: ${d.approved}</span>`:''}
+            <span style="margin-left:10px">Created on: ${d.created}</span>
+          </div>
+        </div>
+      </div>`;}).join('');
+  wrap.innerHTML = html || `<div style="color:var(--muted)">${t('noData')}</div>`;
+}
+
+/* init */
+applyTheme(); bindSettings(); localize(); buildMenus(); renderCards();
+document.getElementById('yearLabel').textContent=DASH.year;
 </script>
 </body>
 </html>
