@@ -1,113 +1,266 @@
-===== index.html =====
-
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ITAM - Home</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITAM · Item Request</title>
+<link rel="icon" href="data:,">
+<style>
+  :root{ --bg:#fafafa; --panel:#ffffff; --line:#e5e7eb; --muted:#667085; --accent:#2563eb;}
+  [data-theme="dark"]{ --bg:#0f1420; --panel:#101828; --line:#1f2937; --muted:#98a2b3; color:#e5e7eb;}
+  *{box-sizing:border-box} html,body{height:100%;margin:0;background:var(--bg);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Thai',sans-serif}
+  .app{display:grid;grid-template-columns:260px 1fr;min-height:100%}
+  aside{border-right:1px solid var(--line);padding:16px}
+  .brand{display:flex;gap:8px;align-items:center;font-weight:800}
+  .home{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#4f46e5,#06b6d4)}
+  .nav{margin-top:12px}
+  .nav a{display:flex;gap:10px;align-items:center;margin:8px 0;padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,.06);text-decoration:none;color:inherit}
+  .nav a.active{outline:2px solid var(--accent)}
+
+  header{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:12px 18px;background:var(--bg);position:sticky;top:0;z-index:5}
+  .right{margin-left:auto;display:flex;gap:10px;align-items:center}
+  .circle{width:36px;height:36px;border-radius:999px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;box-shadow:0 6px 18px rgba(16,24,40,.06);font-weight:800}
+  .user{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 10px;box-shadow:0 6px 18px rgba(16,24,40,.06)}
+
+  .panel{position:relative}
+  .dropdown{position:absolute;top:46px;right:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,.06);min-width:280px;display:none;z-index:30;padding:12px}
+  .dropdown.open{display:block}
+  .section-title{font-size:12px;color:var(--muted);margin:6px 0 8px}
+  .chip-row{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{border:1px solid var(--line);background:#f2f4f7;border-radius:999px;padding:8px 12px;font-weight:600;cursor:pointer}
+
+  main{padding:20px}
+  .h1{font-weight:800;margin:6px 0 12px}
+
+  /* Tabs */
+  .tabs{display:flex;gap:8px;margin:6px 0 12px}
+  .tab{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;font-weight:700}
+  .tab.active{outline:2px solid var(--accent)}
+
+  .bar{display:flex;gap:12px;align-items:center;margin:6px 0 14px}
+  .bar input{padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:inherit;min-width:260px}
+  .hint{color:var(--muted);font-size:13px}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:1000px}
+  @media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .itm{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .ico{width:52px;height:52px;border-radius:999px;display:grid;place-items:center;background:#eef2ff;font-size:24px}
+  [data-theme="dark"] .ico{background:#1f2749}
+  .link{color:#2563eb;cursor:pointer}
+  .add{cursor:pointer}
+  .muted{color:var(--muted)}
+
+  .cart-fab{position:fixed;right:24px;bottom:24px;display:flex;align-items:center;gap:10px}
+  .cart-btn{width:54px;height:54px;border-radius:999px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;box-shadow:0 6px 18px rgba(16,24,40,.06);font-size:22px;cursor:pointer;position:relative}
+  .badge-num{position:absolute;top:-6px;right:-6px;background:#ef4444;color:#fff;border-radius:999px;font-size:12px;padding:3px 6px}
+  .drawer{position:fixed;right:24px;bottom:90px;width:min(360px,92vw);background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,.06);display:none;max-height:60vh;overflow:auto}
+  .drawer.open{display:block}
+  .drawer h3{margin:0;padding:12px 14px;border-bottom:1px solid var(--line)}
+  .drawer .body{padding:12px;display:grid;gap:10px}
+  .row{display:flex;align-items:center;gap:8px;justify-content:space-between;border:1px solid var(--line);border-radius:10px;padding:8px}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:#2563eb;color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer}
+  .btn.ghost{background:transparent;color:inherit;border:1px solid var(--line)}
+
+  dialog::backdrop{background:rgba(0,0,0,.55)}
+  dialog{border:none;border-radius:14px;background:var(--panel);padding:0;overflow:hidden}
+  .modal-head{padding:12px 16px;border-bottom:1px solid var(--line);font-weight:800}
+  .modal-body{padding:14px;display:grid;gap:10px}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Dashboard</h1>
-    <nav>
-      <a href="index.html">Home</a> |
-      <a href="item-request.html">Item Request</a> |
-      <select id="language">
-        <option value="en">English</option>
-        <option value="th">ไทย</option>
-      </select> |
-      <input type="color" id="themeColor" title="Choose theme color">
+<div class="app">
+  <aside>
+    <div class="brand"><div class="home"></div> <span data-i="brand">ITAM · Dashboard for User</span></div>
+    <nav class="nav">
+      <a href="./index.html"><div>🏠</div><span data-i="navDash">Dashboard</span></a>
+      <a class="active" href="./item-request.html"><div>📄</div><span data-i="navItem">Item Request</span></a>
     </nav>
-  </header>
-  <main>
-    <h2>Welcome to ITAM System</h2>
-    <p>Select an option from the menu.</p>
-  </main>
-  <script>
-    document.getElementById('language').addEventListener('change', function() {
-      alert('Language changed to: ' + this.value);
-    });
-    document.getElementById('themeColor').addEventListener('input', function() {
-      document.body.style.backgroundColor = this.value;
-    });
-  </script>
-</body>
-</html>
+  </aside>
 
+  <section>
+    <!-- Fixed top-right menu -->
+    <header>
+      <div class="brand"><div class="home"></div> ITAM · <span data-i="itemTitle">Item Request</span></div>
+      <div class="right">
+        <div class="circle" title="Notifications">🔔</div>
+        <div class="panel">
+          <div class="circle" id="settingsBtn" title="Settings">⚙️</div>
+          <div class="dropdown" id="settingsMenu">
+            <div class="section-title" data-i="colorTheme">Color theme</div>
+            <div class="chip-row">
+              <div class="chip" id="theme-dark" data-i="black">Black</div>
+              <div class="chip" id="theme-light" data-i="white">White</div>
+            </div>
+            <div class="section-title" style="margin-top:10px" data-i="language">Language</div>
+            <div class="chip-row">
+              <div class="chip" id="lang-th">TH</div>
+              <div class="chip" id="lang-en">EN</div>
+            </div>
+          </div>
+        </div>
+        <div class="user" title="Account">
+          <div class="circle" style="width:30px;height:30px">JR</div>
+          <div><div class="name">Jack Reacher</div><div class="role">IT Support</div></div>
+        </div>
+      </div>
+    </header>
 
-===== item-request.html =====
+    <main>
+      <div class="h1" data-i="itemTitle">Item Request</div>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ITAM - Item Request</title>
-</head>
-<body>
-  <header>
-    <h1>Item Request</h1>
-    <nav>
-      <a href="index.html">Home</a> |
-      <a href="item-request.html">Item Request</a> |
-      <select id="language">
-        <option value="en">English</option>
-        <option value="th">ไทย</option>
-      </select> |
-      <input type="color" id="themeColor" title="Choose theme color">
-    </nav>
-  </header>
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab active" id="tabMe" data-i="tabMe">Request for me</div>
+        <div class="tab" id="tabFriend" data-i="tabFriend">Request for friend</div>
+      </div>
 
-  <main>
-    <div class="tabs">
-      <button onclick="showTab('me')">Request for Me</button>
-      <button onclick="showTab('friend')">Request for Friend</button>
+      <!-- Top bar: Available + (Friend email when friend tab) -->
+      <div class="bar">
+        <strong data-i="available">Available to borrow</strong>
+        <div id="friendBar" style="display:none;align-items:center;gap:8px">
+          <span class="hint" data-i="friendEmailLabel">Friend email:</span>
+          <input id="friendEmail" type="email" placeholder="name@example.com" aria-label="friend email"/>
+        </div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+    </main>
+  </section>
+</div>
+
+<!-- Detail modal -->
+<dialog id="detailDlg">
+  <div class="modal-head" id="dlgTitle">Item detail</div>
+  <div class="modal-body">
+    <div id="dlgInfo" class="muted"></div>
+    <div style="display:flex;gap:10px;justify-content:end">
+      <button class="btn ghost" id="dlgClose" data-i="close">Close</button>
+      <button class="btn" id="dlgAdd" data-i="addToCart">Add to cart</button>
     </div>
+  </div>
+</dialog>
 
-    <div id="tab-me" class="tab-content">
-      <h2>Available to Borrow</h2>
-      <ul>
-        <li>Laptop <button>See detail</button></li>
-        <li>Backpack <button>See detail</button></li>
-        <li>Microphone & Speaker <button>See detail</button></li>
-        <li>Charger <button>See detail</button></li>
-        <li>Flash Drive <button>See detail</button></li>
-        <li>Keyboard <button>See detail</button></li>
-        <li>Mouse <button>See detail</button></li>
-        <li>Headphone <button>See detail</button></li>
-      </ul>
+<!-- Floating cart -->
+<div class="cart-fab">
+  <div class="drawer" id="drawer">
+    <h3 data-i="cart">Cart</h3>
+    <div class="body" id="cartList"></div>
+    <div style="display:flex;gap:10px;justify-content:end;padding:0 12px 12px">
+      <button class="btn ghost" id="clearCart" data-i="clear">Clear</button>
+      <button class="btn" id="submitCart" data-i="submit">Submit request</button>
     </div>
+  </div>
+  <div class="cart-btn" id="cartBtn">🧺 <span class="badge-num" id="cartNum">0</span></div>
+</div>
 
-    <div id="tab-friend" class="tab-content" style="display:none;">
-      <h2>Available to Borrow</h2>
-      <label for="friendEmail">Friend Email:</label>
-      <input type="email" id="friendEmail" placeholder="Enter friend's email"><br><br>
-      <ul>
-        <li>Laptop <button>See detail</button></li>
-        <li>Backpack <button>See detail</button></li>
-        <li>Microphone & Speaker <button>See detail</button></li>
-        <li>Charger <button>See detail</button></li>
-        <li>Flash Drive <button>See detail</button></li>
-        <li>Keyboard <button>See detail</button></li>
-        <li>Mouse <button>See detail</button></li>
-        <li>Headphone <button>See detail</button></li>
-      </ul>
-    </div>
-  </main>
+<script>
+/* i18n + theme shared */
+const I18N={
+  th:{brand:"ITAM · แดชบอร์ดผู้ใช้",navDash:"แดชบอร์ด",navItem:"คำขอไอเท็ม",itemTitle:"คำขอไอเท็ม",
+      colorTheme:"ธีมสี",black:"ดำ",white:"ขาว",language:"ภาษา",
+      tabMe:"ขอสำหรับฉัน",tabFriend:"ขอแทนเพื่อน",
+      available:"รายการที่ยืมได้",friendEmailLabel:"อีเมลเพื่อน:",seeDetail:"ดูรายละเอียด",addToCart:"เพิ่มลงตะกร้า",close:"ปิด",
+      cart:"ตะกร้า",clear:"ล้าง",submit:"ส่งคำขอ",empty:"ตะกร้าว่างเปล่า"},
+  en:{brand:"ITAM · Dashboard for User",navDash:"Dashboard",navItem:"Item Request",itemTitle:"Item Request",
+      colorTheme:"Color theme",black:"Black",white:"White",language:"Language",
+      tabMe:"Request for me",tabFriend:"Request for friend",
+      available:"Available to borrow",friendEmailLabel:"Friend email:",seeDetail:"See detail",addToCart:"Add to cart",close:"Close",
+      cart:"Cart",clear:"Clear",submit:"Submit request",empty:"Your cart is empty"}
+};
+function gpref(k,f){ try{return localStorage.getItem(k)||f}catch(e){return f} }
+function spref(k,v){ try{localStorage.setItem(k,v)}catch(e){} }
+const STATE={lang:gpref('itam_lang','th'),theme:gpref('itam_theme','light'),tab:'me'};
+function t(k){return I18N[STATE.lang][k]}
+function applyTheme(){ document.documentElement.dataset.theme = STATE.theme==='dark'?'dark':''; }
+function localize(){
+  document.querySelectorAll('[data-i]').forEach(el=>el.textContent=t(el.dataset.i));
+  document.getElementById('friendEmail').placeholder = STATE.lang==='th'?'name@example.com':'name@example.com';
+}
 
-  <script>
-    function showTab(tab) {
-      document.getElementById('tab-me').style.display = tab === 'me' ? 'block' : 'none';
-      document.getElementById('tab-friend').style.display = tab === 'friend' ? 'block' : 'none';
-    }
+document.getElementById('settingsBtn').onclick=()=>document.getElementById('settingsMenu').classList.toggle('open');
+document.addEventListener('click',(e)=>{ if(!e.target.closest('#settingsBtn')&&!e.target.closest('#settingsMenu')) document.getElementById('settingsMenu').classList.remove('open'); });
+document.getElementById('theme-dark').onclick=()=>{STATE.theme='dark';spref('itam_theme','dark');applyTheme()};
+document.getElementById('theme-light').onclick=()=>{STATE.theme='light';spref('itam_theme','light');applyTheme()};
+document.getElementById('lang-th').onclick=()=>{STATE.lang='th';spref('itam_lang','th');localize();renderGrid();};
+document.getElementById('lang-en').onclick=()=>{STATE.lang='en';spref('itam_lang','en');localize();renderGrid();};
+applyTheme(); localize();
 
-    document.getElementById('language').addEventListener('change', function() {
-      alert('Language changed to: ' + this.value);
-    });
-    document.getElementById('themeColor').addEventListener('input', function() {
-      document.body.style.backgroundColor = this.value;
-    });
-  </script>
+/* Tabs + friend email */
+const tabMe=document.getElementById('tabMe'), tabFriend=document.getElementById('tabFriend'), friendBar=document.getElementById('friendBar');
+tabMe.onclick=()=>{STATE.tab='me'; tabMe.classList.add('active'); tabFriend.classList.remove('active'); friendBar.style.display='none';};
+tabFriend.onclick=()=>{STATE.tab='friend'; tabFriend.classList.add('active'); tabMe.classList.remove('active'); friendBar.style.display='flex';};
+
+/* Items + detail */
+const ITEMS=[
+  {name:"Laptop", icon:"💻", detail:"Lenovo ThinkPad X13 G5 · CPU i5 · RAM 16GB · SSD 512GB · Expired 010127"},
+  {name:"Backpack", icon:"🎒", detail:"15.6\" Laptop bag · Water-resist · Expired 300627"},
+  {name:"Microphone and Speaker", icon:"🎤", detail:"Conference Mic+Speaker · USB-C · Echo cancel · Expired 300626"},
+  {name:"Charger", icon:"🔌", detail:"65W USB-C Charger · PD 3.0 · Cable 1.5m · Expired 150228"},
+  {name:"Flash Drive", icon:"🔘", detail:"USB 3.2 64GB · Read 150MB/s · Expired 311226"},
+  {name:"Keyboard", icon:"⌨️", detail:"Mechanical 87 keys · Brown switch · Expired 010129"},
+  {name:"Mouse", icon:"🖱️", detail:"Wireless 2.4GHz · DPI 800-1600 · Expired 010228"},
+  {name:"Headphone", icon:"🎧", detail:"Over-ear · Noise isolation · Expired 010129"}
+];
+const CART=new Map();
+
+function renderGrid(){
+  const g=document.getElementById('grid');
+  g.innerHTML=ITEMS.map(it=>`
+    <div class="itm">
+      <div class="ico">${it.icon}</div>
+      <div>
+        <div style="font-weight:700">${it.name}</div>
+        <div class="link" data-see="${it.name}">${t('seeDetail')}</div>
+      </div>
+      <div class="add" title="${t('addToCart')}" data-add="${it.name}">🧺</div>
+    </div>`).join('');
+  g.querySelectorAll('[data-see]').forEach(a=>a.onclick=()=>openDetail(a.dataset.see));
+  g.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{ addToCart(b.dataset.add); });
+}
+renderGrid();
+
+function openDetail(name){
+  const item=ITEMS.find(i=>i.name===name);
+  const dlg=document.getElementById('detailDlg');
+  document.getElementById('dlgTitle').textContent=name;
+  document.getElementById('dlgInfo').textContent=item?item.detail:"-";
+  const add=document.getElementById('dlgAdd');
+  add.textContent = t('addToCart');
+  add.onclick=()=>{ addToCart(name); dlg.close(); };
+  document.getElementById('dlgClose').onclick=()=>dlg.close();
+  dlg.showModal();
+}
+
+/* Cart */
+function addToCart(name){
+  CART.set(name,(CART.get(name)||0)+1);
+  renderCart();
+}
+function renderCart(){
+  const list=document.getElementById('cartList');
+  const arr=[...CART.entries()];
+  document.getElementById('cartNum').textContent=arr.reduce((a,[,q])=>a+q,0);
+  list.innerHTML = arr.length
+    ? arr.map(([n,q])=>`
+        <div class="row">
+          <div>${n}${STATE.tab==='friend' ? ' — ' + (document.getElementById('friendEmail').value||'') : ''}</div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <button class="btn ghost" data-dec="${n}">−</button>
+            <strong>${q}</strong>
+            <button class="btn ghost" data-inc="${n}">+</button>
+          </div>
+        </div>`).join('')
+    : `<div class="muted">${t('empty')}</div>`;
+  list.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{ CART.set(b.dataset.inc,(CART.get(b.dataset.inc)||0)+1); renderCart(); });
+  list.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{ const k=b.dataset.dec; const q=(CART.get(k)||1)-1; if(q<=0) CART.delete(k); else CART.set(k,q); renderCart(); });
+}
+(function bindCart(){
+  const btn=document.getElementById('cartBtn'); const drawer=document.getElementById('drawer');
+  btn.onclick=()=>drawer.classList.toggle('open');
+  document.getElementById('clearCart').onclick=()=>{ CART.clear(); renderCart(); };
+  document.getElementById('submitCart').onclick=()=>{ alert('Demo: request submitted!'); CART.clear(); renderCart(); drawer.classList.remove('open'); };
+})();
+</script>
 </body>
 </html>
