@@ -259,7 +259,22 @@ function renderCart(){
   const btn=document.getElementById('cartBtn'); const drawer=document.getElementById('drawer');
   btn.onclick=()=>drawer.classList.toggle('open');
   document.getElementById('clearCart').onclick=()=>{ CART.clear(); renderCart(); };
-  document.getElementById('submitCart').onclick=()=>{ alert('Demo: request submitted!'); CART.clear(); renderCart(); drawer.classList.remove('open'); };
+document.getElementById('submitCart').onclick = () => {
+ const payload = {
+   items: [...CART.entries()].map(([name, qty]) => ({ name, qty })),
+   friendEmail: document.getElementById('tabFriend').classList.contains('active')
+     ? (document.getElementById('friendEmail').value || '')
+     : '',
+   ts: Date.now()
+ };
+ try {
+   localStorage.setItem('itam_cart_submit', JSON.stringify(payload));
+ } catch (e) {
+   console.error("Error saving cart:", e);
+ }
+ // แค่แจ้งเตือน ไม่ล้างตะกร้า
+ alert('Request saved.');
+};
 })();
 </script>
 </body>
