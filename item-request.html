@@ -270,10 +270,11 @@ document.getElementById('submitCart').onclick = () => {
  try {
    localStorage.setItem('itam_cart_submit', JSON.stringify(payload));
  } catch (e) {
-   console.error("Error saving cart:", e);
+   // ถ้า localStorage ล้มเหลว ก็ยังคง redirect ไปหน้า summary ตามเงื่อนไข 100%
+   console.error('localStorage error:', e);
  }
- // แค่แจ้งเตือน ไม่ล้างตะกร้า
- alert('Request saved.');
+ // เปลี่ยนหน้าแบบ 100% — ไม่มี alert, ไม่ clear ตะกร้า, ไม่ปิด drawer
+ window.location.href = './your-items.html';
 };
 })();
 </script>
