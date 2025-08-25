@@ -83,34 +83,71 @@
   </section>
 </div>
 <script>
-const DATA=[
-  {ticket:"ITAM01-202906", item:"Lenovo ThinkPad X1 Gen5", qty:1, sn:"GMXK2W", status:"approved", created:"2025-08-15", approved:"2025-08-25"},
-  {ticket:"ITAM02-202908", item:"Lenovo 65W USB-C", qty:1, sn:"C123", status:"pending", created:"2025-08-16"},
-  {ticket:"ITAM03-202908", item:"Logitech M331", qty:1, sn:"L0M478B", status:"rejected", created:"2025-08-17"},
-  {ticket:"ITAM05-202903", item:"Anker GaN 45W", qty:1, sn:"ANK45", status:"resub", created:"2025-03-02"}
+<script>
+/* ===== ข้อมูลตัวอย่างบน Dashboard ===== */
+const DATA = [
+ {ticket:"ITAM01-202906", item:"Lenovo ThinkPad X1 Gen5", qty:1, sn:"GMXK2W",
+  status:"approved", created:"2025-08-15", approved:"2025-08-25"},
+ {ticket:"ITAM02-202908", item:"Lenovo 65W USB-C", qty:1, sn:"C123",
+  status:"pending", created:"2025-08-16"},
+ {ticket:"ITAM03-202908", item:"Logitech M331", qty:1, sn:"L0M478B",
+  status:"rejected", created:"2025-08-17"},
+ {ticket:"ITAM05-202903", item:"Anker GaN 45W", qty:1, sn:"ANK45",
+  status:"resub", created:"2025-03-02"},
+ /* แถวตัวอย่างปี 2024 เพื่อให้เห็นผลฟิลเตอร์ปี */
+ {ticket:"ITAM01-202412", item:"ThinkPad X13 G4", qty:1, sn:"AB12C3",
+  status:"approved", created:"2024-12-10", approved:"2024-12-15"},
+ {ticket:"ITAM02-202403", item:"USB-C Dock", qty:1, sn:"DOCK77",
+  status:"pending", created:"2024-03-05"}
 ];
-const STY={approved:['green','✅'],pending:['yellow','🛠️'],rejected:['red','⛔'],resub:['blue','🔁']};
-function renderCards(){ 
-  const wrap=document.getElementById('cards');
-  wrap.innerHTML = DATA.map(d=>{ const [c,ico]=STY[d.status];
-    return `<div class="card ${c}"><div class="icon">${ico}</div><div>
-      <div style="font-weight:800">Ticket: ${d.ticket}</div>
-      <div style="color:var(--muted)">${d.item} · ${d.qty} Unit · SN: ${d.sn}</div>
-      <div style="margin-top:6px;color:var(--muted)">
-        <span class="badge ${c}">${d.status.toUpperCase()}</span>
-        ${d.status==='approved'?`<span style="margin-left:10px">Approved: ${d.approved}</span>`:''}
-        <span style="margin-left:10px">Created on: ${d.created}</span>
-      </div>
-    </div></div>`;
-  }).join('');
+/* สี/ไอคอนตามสถานะ */
+const STY = {
+ approved:['green','✅'],
+ pending:['yellow','🛠️'],
+ rejected:['red','⛔'],
+ resub:['blue','🔁'],
+ deleted:['red','🗑️']
+};
+/* ===== ฟังก์ชันช่วยเหลือ ===== */
+function yearOf(dstr){ return (dstr || '').slice(0,4); }
+function currentFilters(){
+ const y = document.getElementById('yearSel')?.value || 'all';
+ const s = document.getElementById('statusSel')?.value || 'all';
+ return {year:y, status:s};
 }
+/* ===== เรนเดอร์การ์ด โดยอิงตามฟิลเตอร์ที่เลือก ===== */
+function renderCards(){
+ const {year, status} = currentFilters();
+ const rows = DATA.filter(row=>{
+   const matchYear   = (year==='all')   ? true : (yearOf(row.created)===year);
+   const matchStatus = (status==='all') ? true : (row.status===status);
+   return matchYear && matchStatus;
+ });
+ const wrap = document.getElementById('cards');
+ wrap.innerHTML = rows.map(d=>{
+   const [c,ico] = STY[d.status] || ['','📄'];
+   return `
+<div class="card ${c}">
+<div class="icon">${ico}</div>
+<div>
+<div style="font-weight:800">Ticket: ${d.ticket}</div>
+<div style="color:var(--muted)">${d.item} · ${d.qty} Unit · SN: ${d.sn}</div>
+<div style="margin-top:6px;color:var(--muted)">
+<span class="badge ${c}">${(d.status||'').toUpperCase()}</span>
+           ${d.approved ? `<span style="margin-left:10px">Approved: ${d.approved}</span>` : ''}
+<span style="margin-left:10px">Created on: ${d.created}</span>
+</div>
+</div>
+</div>`;
+ }).join('') || `<div style="color:var(--muted)">No requests found for selected filters.</div>`;
+}
+/* ===== ผูกเหตุการณ์เปลี่ยนฟิลเตอร์ ===== */
+document.getElementById('yearSel')?.addEventListener('change', renderCards);
+document.getElementById('statusSel')?.addEventListener('change', renderCards);
+/* แสดงผลครั้งแรก */
 renderCards();
-document.getElementById('settingsBtn').onclick=()=>document.getElementById('settingsMenu').classList.toggle('open');
-document.addEventListener('click',(e)=>{ if(!e.target.closest('#settingsBtn')&&!e.target.closest('#settingsMenu')) document.getElementById('settingsMenu').classList.remove('open'); });
-document.getElementById('theme-dark').onclick=()=>{document.documentElement.dataset.theme='dark'};
-document.getElementById('theme-light').onclick=()=>{document.documentElement.dataset.theme=''};
-document.getElementById('lang-th').onclick=()=>alert('ตัวอย่าง: เปลี่ยนเป็นภาษาไทย');
-document.getElementById('lang-en').onclick=()=>alert('Example: switched to English');
+/* (หมายเหตุ) ถ้าคุณมีสคริปต์ของเมนู Settings/แจ้งเตือน/โปรไฟล์อยู่แล้ว
+  ให้คงไว้ตามเดิมด้านล่างนี้ได้ ไม่มีผลกระทบกับโค้ดฟิลเตอร์ */
 </script>
 </body>
 </html>
