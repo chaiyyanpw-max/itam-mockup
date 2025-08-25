@@ -6,101 +6,181 @@
 <title>ITAM · Dashboard</title>
 <link rel="icon" href="data:,">
 <style>
-  :root{ --bg:#f7f9fc; --panel:#ffffff; --line:#e5e7eb; --muted:#667085; --text:#111827; --shadow:0 6px 18px rgba(16,24,40,.06); --accent:#2563eb;}
-  [data-theme="dark"]{ --bg:#0f1420; --panel:#101828; --line:#1f2937; --muted:#98a2b3; --text:#e5e7eb; }
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Thai',sans-serif}
-  a{color:var(--accent);text-decoration:none}
-  .app{display:grid;grid-template-columns:260px 1fr;min-height:100%}
-  aside{border-right:1px solid var(--line);padding:16px}
-  .brand{display:flex;gap:8px;align-items:center;font-weight:800}
-  .home{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#4f46e5,#06b6d4)}
-  .nav{margin-top:12px}
-  .nav a{display:flex;gap:10px;align-items:center;margin:8px 0;padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);color:var(--text)}
-  .nav a.active{outline:2px solid var(--accent)}
-  header{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:12px 18px;background:var(--bg);position:sticky;top:0;z-index:5}
-  .right{margin-left:auto;display:flex;gap:10px;align-items:center}
-  .circle{width:36px;height:36px;border-radius:999px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;box-shadow:var(--shadow);font-weight:800}
-  .user{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 10px;box-shadow:var(--shadow)}
-  .panel{position:relative}
-  .dropdown{position:absolute;top:46px;right:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);min-width:280px;display:none;z-index:30;padding:12px}
-  .dropdown.open{display:block}
-  .section-title{font-size:12px;color:var(--muted);margin:6px 0 8px}
-  .chip-row{display:flex;gap:8px;flex-wrap:wrap}
-  .chip{border:1px solid var(--line);background:#f2f4f7;border-radius:999px;padding:8px 12px;font-weight:600;cursor:pointer}
-  [data-theme="dark"] .chip{background:#0f172a}
-  main{padding:20px}
-  .h1{font-weight:800;margin:6px 0 12px}
-
-.cards{display:grid;gap:14px;max-width:980px}
-.card{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:16px;border-radius:16px;border:1px solid var(--line)}
-.icon{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;background:rgba(0,0,0,.08)}
-.badge{display:inline-block;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;border:1px solid var(--line);margin-right:8px}
-.green{background:#e9fbf0} .yellow{background:#fff8e6} .red{background:#ffe9ea} .blue{background:#eef1ff}
+ :root{ --bg:#f7f9fc; --panel:#ffffff; --line:#e5e7eb; --muted:#667085; --text:#111827; --shadow:0 6px 18px rgba(16,24,40,.06); --accent:#2563eb;}
+ [data-theme="dark"]{ --bg:#0f1420; --panel:#101828; --line:#1f2937; --muted:#98a2b3; --text:#e5e7eb; }
+ *{box-sizing:border-box}
+ html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Thai',sans-serif}
+ a{color:var(--accent);text-decoration:none}
+ .app{display:grid;grid-template-columns:260px 1fr;min-height:100%}
+ aside{border-right:1px solid var(--line);padding:16px}
+ .brand{display:flex;gap:8px;align-items:center;font-weight:800}
+ .home{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#4f46e5,#06b6d4)}
+ .nav{margin-top:12px}
+ .nav a{display:flex;gap:10px;align-items:center;margin:8px 0;padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);color:var(--text)}
+ .nav a.active{outline:2px solid var(--accent)}
+ header{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:12px 18px;background:var(--bg);position:sticky;top:0;z-index:5}
+ .right{margin-left:auto;display:flex;gap:10px;align-items:center}
+ .circle{width:36px;height:36px;border-radius:999px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;box-shadow:var(--shadow);font-weight:800}
+ .user{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 10px;box-shadow:var(--shadow)}
+ .panel{position:relative}
+ .dropdown{position:absolute;top:46px;right:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);min-width:280px;display:none;z-index:30;padding:12px}
+ .dropdown.open{display:block}
+ .section-title{font-size:12px;color:var(--muted);margin:6px 0 8px}
+ .chip-row{display:flex;gap:8px;flex-wrap:wrap}
+ .chip{border:1px solid var(--line);background:#f2f4f7;border-radius:999px;padding:8px 12px;font-weight:600;cursor:pointer}
+ [data-theme="dark"] .chip{background:#0f172a}
+ main{padding:20px}
+ .h1{font-weight:800;margin:6px 0 12px}
+ /* Cards */
+ .cards{display:grid;gap:14px;max-width:980px}
+ .card{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:16px;border-radius:16px;border:1px solid var(--line)}
+ .icon{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;background:rgba(0,0,0,.08)}
+ .badge{display:inline-block;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;border:1px solid var(--line);margin-right:8px}
+ .green{background:#e9fbf0} .yellow{background:#fff8e6} .red{background:#ffe9ea} .blue{background:#eef1ff}
+ /* Filter bar */
+ .filterbar{display:flex;gap:10px;align-items:center;margin:8px 0 14px;flex-wrap:wrap}
+ .filterbar label{font-size:13px;color:var(--muted)}
+ .filterbar select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);min-width:160px}
 </style>
 </head>
 <body>
 <div class="app">
-  <aside>
-    <div class="brand"><div class="home"></div> ITAM · Dashboard</div>
-    <nav class="nav">
-      <a class="active" href="./index.html">🏠 Dashboard</a>
-      <a href="./item-request.html">📄 Item Request</a>
-    </nav>
-  </aside>
-
-  <section>
-    <header>
-      <div class="brand"><div class="home"></div> ITAM · Dashboard for User</div>
-      <div class="right">
-        <div class="circle" title="Notifications">🔔</div>
-        <div class="panel">
-          <div class="circle" id="settingsBtn" title="Settings">⚙️</div>
-          <div class="dropdown" id="settingsMenu">
-            <div class="section-title">Color theme</div>
-            <div class="chip-row">
-              <div class="chip" id="theme-dark">Black</div>
-              <div class="chip" id="theme-light">White</div>
-            </div>
-            <div class="section-title" style="margin-top:10px">Language</div>
-            <div class="chip-row">
-              <div class="chip" id="lang-th">TH</div>
-              <div class="chip" id="lang-en">EN</div>
-            </div>
-          </div>
-        </div>
-        <div class="user" title="Account">
-          <div class="circle" style="width:30px;height:30px">JR</div>
-          <div><div style="font-weight:700">Jack Reacher</div><div style="font-size:12px;color:var(--muted)">IT Support</div></div>
-        </div>
-      </div>
-    </header>
-
-    <main>
-      <div class="h1">Approve Request</div>
-      <div class="cards" id="cards"></div>
-    </main>
-  </section>
+<aside>
+<div class="brand"><div class="home"></div> ITAM · Dashboard</div>
+<nav class="nav">
+<a class="active" href="./index.html">🏠 Dashboard</a>
+<a href="./item-request.html">📄 Item Request</a>
+</nav>
+</aside>
+<section>
+<header>
+<div class="brand"><div class="home"></div> <span id="hdrDash">ITAM · Dashboard for User</span></div>
+<div class="right">
+<div class="circle" title="Notifications">🔔</div>
+<div class="panel">
+<div class="circle" id="settingsBtn" title="Settings">⚙️</div>
+<div class="dropdown" id="settingsMenu">
+<div class="section-title" id="iColorTheme">Color theme</div>
+<div class="chip-row">
+<div class="chip" id="theme-dark">Black</div>
+<div class="chip" id="theme-light">White</div>
+</div>
+<div class="section-title" style="margin-top:10px" id="iLanguage">Language</div>
+<div class="chip-row">
+<div class="chip" id="lang-th">TH</div>
+<div class="chip" id="lang-en">EN</div>
+</div>
+</div>
+</div>
+<div class="user" title="Account">
+<div class="circle" style="width:30px;height:30px">JR</div>
+<div><div style="font-weight:700">Jack Reacher</div><div style="font-size:12px;color:var(--muted)">IT Support</div></div>
+</div>
+</div>
+</header>
+<main>
+<div class="h1" id="titleApprove">Approve Request</div>
+<!-- Filter bar -->
+<div class="filterbar">
+<label for="yearSel" id="lblYear">Year</label>
+<select id="yearSel">
+<option value="all">All</option>
+<option value="2025" selected>2025</option>
+<option value="2024">2024</option>
+</select>
+<label for="statusSel" id="lblReq" style="margin-left:8px">Requests</label>
+<select id="statusSel">
+<option value="all" selected>All Requests</option>
+<option value="pending">Pending for me</option>
+<option value="resub">Re-Submitted Req.</option>
+<option value="rejected">Rejected Requests</option>
+<option value="approved">Approved Req.</option>
+<option value="deleted">Deleted Req.</option>
+</select>
+</div>
+<div class="cards" id="cards"></div>
+</main>
+</section>
 </div>
 <script>
-<script>
-/* ===== ข้อมูลตัวอย่างบน Dashboard ===== */
+/* ========= I18N ========= */
+const I18N = {
+ th: {
+   hdrDash: "ITAM · แดชบอร์ดผู้ใช้",
+   titleApprove: "อนุมัติคำขอ",
+   colorTheme: "ธีมสี",
+   language: "ภาษา",
+   year: "ปี",
+   requests: "คำขอ",
+   all: "ทั้งหมด",
+   allReq: "คำขอทั้งหมด",
+   pending: "รอดำเนินการของฉัน",
+   resub: "คำขอส่งใหม่",
+   rejected: "คำขอถูกปฏิเสธ",
+   approved: "คำขออนุมัติแล้ว",
+   deleted: "ลบแล้ว",
+   createdOn: "สร้างเมื่อ",
+   approvedOn: "อนุมัติเมื่อ",
+   noData: "ไม่พบคำขอตามเงื่อนไขที่เลือก"
+ },
+ en: {
+   hdrDash: "ITAM · Dashboard for User",
+   titleApprove: "Approve Request",
+   colorTheme: "Color theme",
+   language: "Language",
+   year: "Year",
+   requests: "Requests",
+   all: "All",
+   allReq: "All Requests",
+   pending: "Pending for me",
+   resub: "Re-Submitted Req.",
+   rejected: "Rejected Requests",
+   approved: "Approved Req.",
+   deleted: "Deleted Req.",
+   createdOn: "Created on",
+   approvedOn: "Approved",
+   noData: "No requests found for selected filters."
+ }
+};
+function gpref(k,f){ try{return localStorage.getItem(k)||f}catch(e){return f} }
+function spref(k,v){ try{localStorage.setItem(k,v)}catch(e){} }
+const STATE = {
+ lang: gpref('itam_lang','th'),
+ theme: gpref('itam_theme','light')
+};
+function t(key){ return (I18N[STATE.lang]||I18N.en)[key] || key; }
+function applyTheme(){
+ document.documentElement.dataset.theme = STATE.theme==='dark' ? 'dark' : '';
+}
+function localizeStatic(){
+ document.getElementById('hdrDash').textContent = t('hdrDash');
+ document.getElementById('titleApprove').textContent = t('titleApprove');
+ document.getElementById('iColorTheme').textContent = t('colorTheme');
+ document.getElementById('iLanguage').textContent = t('language');
+ // labels
+ document.getElementById('lblYear').textContent = t('year');
+ document.getElementById('lblReq').textContent = t('requests');
+ // options text for status select
+ const statusSel = document.getElementById('statusSel');
+ statusSel.options[0].text = t('allReq');
+ statusSel.options[1].text = t('pending');
+ statusSel.options[2].text = t('resub');
+ statusSel.options[3].text = t('rejected');
+ statusSel.options[4].text = t('approved');
+ statusSel.options[5].text = t('deleted');
+ // options text for year select (All)
+ const yearSel = document.getElementById('yearSel');
+ yearSel.options[0].text = t('all');
+}
+/* ========= Sample data ========= */
 const DATA = [
- {ticket:"ITAM01-202906", item:"Lenovo ThinkPad X1 Gen5", qty:1, sn:"GMXK2W",
-  status:"approved", created:"2025-08-15", approved:"2025-08-25"},
- {ticket:"ITAM02-202908", item:"Lenovo 65W USB-C", qty:1, sn:"C123",
-  status:"pending", created:"2025-08-16"},
- {ticket:"ITAM03-202908", item:"Logitech M331", qty:1, sn:"L0M478B",
-  status:"rejected", created:"2025-08-17"},
- {ticket:"ITAM05-202903", item:"Anker GaN 45W", qty:1, sn:"ANK45",
-  status:"resub", created:"2025-03-02"},
- /* แถวตัวอย่างปี 2024 เพื่อให้เห็นผลฟิลเตอร์ปี */
- {ticket:"ITAM01-202412", item:"ThinkPad X13 G4", qty:1, sn:"AB12C3",
-  status:"approved", created:"2024-12-10", approved:"2024-12-15"},
- {ticket:"ITAM02-202403", item:"USB-C Dock", qty:1, sn:"DOCK77",
-  status:"pending", created:"2024-03-05"}
+ {ticket:"ITAM01-202906", item:"Lenovo ThinkPad X1 Gen5", qty:1, sn:"GMXK2W", status:"approved", created:"2025-08-15", approved:"2025-08-25"},
+ {ticket:"ITAM02-202908", item:"Lenovo 65W USB-C", qty:1, sn:"C123", status:"pending", created:"2025-08-16"},
+ {ticket:"ITAM03-202908", item:"Logitech M331", qty:1, sn:"L0M478B", status:"rejected", created:"2025-08-17"},
+ {ticket:"ITAM05-202903", item:"Anker GaN 45W", qty:1, sn:"ANK45", status:"resub", created:"2025-03-02"},
+ /* ตัวอย่างปี 2024 เพื่อให้เห็นผลฟิลเตอร์ปี */
+ {ticket:"ITAM01-202412", item:"ThinkPad X13 G4", qty:1, sn:"AB12C3", status:"approved", created:"2024-12-10", approved:"2024-12-15"}
 ];
-/* สี/ไอคอนตามสถานะ */
 const STY = {
  approved:['green','✅'],
  pending:['yellow','🛠️'],
@@ -108,20 +188,26 @@ const STY = {
  resub:['blue','🔁'],
  deleted:['red','🗑️']
 };
-/* ===== ฟังก์ชันช่วยเหลือ ===== */
-function yearOf(dstr){ return (dstr || '').slice(0,4); }
+function yearOf(dstr){ return (dstr||'').slice(0,4); }
 function currentFilters(){
  const y = document.getElementById('yearSel')?.value || 'all';
  const s = document.getElementById('statusSel')?.value || 'all';
  return {year:y, status:s};
 }
-/* ===== เรนเดอร์การ์ด โดยอิงตามฟิลเตอร์ที่เลือก ===== */
+function statusLabel(key){
+ if(key==='approved') return t('approved');
+ if(key==='pending')  return t('pending');
+ if(key==='rejected') return t('rejected');
+ if(key==='resub')    return t('resub');
+ if(key==='deleted')  return t('deleted');
+ return key;
+}
 function renderCards(){
  const {year, status} = currentFilters();
  const rows = DATA.filter(row=>{
-   const matchYear   = (year==='all')   ? true : (yearOf(row.created)===year);
-   const matchStatus = (status==='all') ? true : (row.status===status);
-   return matchYear && matchStatus;
+   const okY = (year==='all') ? true : (yearOf(row.created)===year);
+   const okS = (status==='all') ? true : (row.status===status);
+   return okY && okS;
  });
  const wrap = document.getElementById('cards');
  wrap.innerHTML = rows.map(d=>{
@@ -133,22 +219,28 @@ function renderCards(){
 <div style="font-weight:800">Ticket: ${d.ticket}</div>
 <div style="color:var(--muted)">${d.item} · ${d.qty} Unit · SN: ${d.sn}</div>
 <div style="margin-top:6px;color:var(--muted)">
-<span class="badge ${c}">${(d.status||'').toUpperCase()}</span>
-           ${d.approved ? `<span style="margin-left:10px">Approved: ${d.approved}</span>` : ''}
-<span style="margin-left:10px">Created on: ${d.created}</span>
+<span class="badge ${c}">${statusLabel(d.status)}</span>
+           ${d.approved ? `<span style="margin-left:10px">${t('approvedOn')}: ${d.approved}</span>` : ''}
+<span style="margin-left:10px">${t('createdOn')}: ${d.created}</span>
 </div>
 </div>
 </div>`;
- }).join('') || `<div style="color:var(--muted)">No requests found for selected filters.</div>`;
+ }).join('') || `<div style="color:var(--muted)">${t('noData')}</div>`;
 }
-/* ===== ผูกเหตุการณ์เปลี่ยนฟิลเตอร์ ===== */
-document.getElementById('yearSel')?.addEventListener('change', renderCards);
-document.getElementById('statusSel')?.addEventListener('change', renderCards);
-/* แสดงผลครั้งแรก */
+/* ========= Settings panel ========= */
+document.getElementById('settingsBtn').onclick=()=>document.getElementById('settingsMenu').classList.toggle('open');
+document.addEventListener('click',(e)=>{ if(!e.target.closest('#settingsBtn')&&!e.target.closest('#settingsMenu')) document.getElementById('settingsMenu').classList.remove('open'); });
+document.getElementById('theme-dark').onclick=()=>{STATE.theme='dark';spref('itam_theme','dark');applyTheme()};
+document.getElementById('theme-light').onclick=()=>{STATE.theme='light';spref('itam_theme','light');applyTheme()};
+document.getElementById('lang-th').onclick=()=>{STATE.lang='th';spref('itam_lang','th');localizeStatic();renderCards();};
+document.getElementById('lang-en').onclick=()=>{STATE.lang='en';spref('itam_lang','en');localizeStatic();renderCards();};
+/* ========= Wire filters ========= */
+document.getElementById('yearSel').addEventListener('change', renderCards);
+document.getElementById('statusSel').addEventListener('change', renderCards);
+/* ========= First paint ========= */
+applyTheme();
+localizeStatic();
 renderCards();
-/* (หมายเหตุ) ถ้าคุณมีสคริปต์ของเมนู Settings/แจ้งเตือน/โปรไฟล์อยู่แล้ว
-  ให้คงไว้ตามเดิมด้านล่างนี้ได้ ไม่มีผลกระทบกับโค้ดฟิลเตอร์ */
 </script>
 </body>
 </html>
-
