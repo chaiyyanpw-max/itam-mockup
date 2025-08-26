@@ -1,0 +1,289 @@
+<!doctype html>
+
+<html lang="th">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>ITAM · Admin Console</title>
+
+<link rel="icon" href="data:,">
+
+<style>
+
+  :root{ --bg:#f7f9fc; --panel:#ffffff; --line:#e5e7eb; --muted:#667085; --text:#111827; --shadow:0 6px 18px rgba(16,24,40,.06); --accent:#2563eb; --good:#16a34a; --bad:#dc2626;}
+
+  *{box-sizing:border-box} html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Thai',sans-serif}
+
+  .app{display:grid;grid-template-columns:260px 1fr;min-height:100%}
+
+  aside{border-right:1px solid var(--line);padding:16px}
+
+  .brand{display:flex;gap:8px;align-items:center;font-weight:800}
+
+  .home{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#4f46e5,#06b6d4)}
+
+  .nav{margin-top:12px}
+
+  .nav a{display:flex;gap:10px;align-items:center;margin:8px 0;padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);color:var(--text)}
+
+  .nav a.active{outline:2px solid var(--accent)}
+
+  header{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:12px 18px;background:var(--bg);position:sticky;top:0;z-index:5}
+
+  .right{margin-left:auto;display:flex;gap:10px;align-items:center}
+
+  .btn{border:0;border-radius:10px;padding:6px 10px;cursor:pointer}
+
+  .btn-approve{background:var(--good);color:#fff}
+
+  .btn-reject{background:var(--bad);color:#fff}
+
+  .btn-print{background:var(--accent);color:#fff}
+
+  .btn-ghost{background:#fff;border:1px solid var(--line)}
+
+  main{padding:20px}
+
+  .h1{font-weight:800;margin:6px 0 12px}
+
+  table{width:100%;border-collapse:separate;border-spacing:0 10px;max-width:1100px}
+
+  td,th{padding:12px 14px;background:var(--panel);border:1px solid var(--line)}
+
+  th{background:#f3f4f6;text-align:left}
+
+  tr td:first-child, tr th:first-child{border-radius:12px 0 0 12px}
+
+  tr td:last-child, tr th:last-child{border-radius:0 12px 12px 0}
+
+  .status{font-weight:700}
+
+  .s-pending{color:#ca8a04}
+
+  .s-approved{color:#16a34a}
+
+  .s-rejected{color:#dc2626}
+
+  .toolbar{display:flex;gap:8px;align-items:center}
+
+  .muted{color:var(--muted)}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+  <aside>
+
+    <div class="brand"><div class="home"></div> ITAM</div>
+
+    <nav class="nav">
+
+      <a href="./index.html">🏠 Dashboard</a>
+
+      <a href="./item-request.html">📄 Item Request</a>
+
+      <a href="./your-items.html">✅ Your Items</a>
+
+      <a class="active" href="./admin.html">🛡️ Admin Console</a>
+
+      <a href="./flow.html">🧭 Workflow</a>
+
+      <a class="btn-ghost" id="logout" style="margin-top:12px;text-align:center">Log out</a>
+
+    </nav>
+
+  </aside>
+
+
+
+  <section>
+
+    <header>
+
+      <div class="brand"><div class="home"></div> Admin Console</div>
+
+      <div class="right muted"><span id="who"></span></div>
+
+    </header>
+
+
+
+    <main>
+
+      <div class="h1">คำขอทั้งหมด / รอดำเนินการ</div>
+
+      <table id="tbl">
+
+        <thead>
+
+          <tr>
+
+            <th style="width:150px">Ticket</th>
+
+            <th>Item</th>
+
+            <th style="width:140px">Requester</th>
+
+            <th style="width:120px">Created</th>
+
+            <th style="width:120px">Status</th>
+
+            <th style="width:280px">Action</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="rows"></tbody>
+
+      </table>
+
+    </main>
+
+  </section>
+
+</div>
+
+
+
+<iframe id="printFrame" style="display:none"></iframe>
+
+
+
+<script>
+
+/* ---- Auth guard: admin only ---- */
+
+function getSession(){ try{ return JSON.parse(localStorage.getItem('itam_user')||'null'); }catch(e){ return null; } }
+
+const me = getSession();
+
+if(!me){ location.href='login.html'; }
+
+if(me && me.role !== 'admin'){ location.href='index.html'; }
+
+document.getElementById('who').textContent = me ? (me.name+' • '+me.role) : '';
+
+document.getElementById('logout').onclick = ()=>{ try{localStorage.removeItem('itam_user')}catch(e){}; location.href='login.html'; };
+
+
+
+/* ---- Demo data ---- */
+
+const DATA = [
+
+  {ticket:"ITAM01-202906", item:"Lenovo ThinkPad X1 Gen5 · SN GMXK2W", requester:"jack.r", created:"2025-08-15", status:"pending"},
+
+  {ticket:"ITAM02-202908", item:"Lenovo 65W USB-C · SN C123", requester:"jack.r", created:"2025-08-16", status:"pending"},
+
+  {ticket:"ITAM03-202908", item:"Logitech M331 · SN L0M478B", requester:"jack.r", created:"2025-08-17", status:"rejected"},
+
+  {ticket:"ITAM05-202903", item:"Anker GaN 45W · SN ANK45", requester:"jack.r", created:"2025-03-02", status:"resub"}
+
+];
+
+function statusClass(s){ if(s==='approved')return's-approved'; if(s==='rejected')return's-rejected'; return's-pending'; }
+
+function draw(){
+
+  rows.innerHTML = DATA.map((d,i)=>`
+
+    <tr>
+
+      <td>${d.ticket}</td>
+
+      <td>${d.item}</td>
+
+      <td>${d.requester}</td>
+
+      <td>${d.created}</td>
+
+      <td class="status ${statusClass(d.status)}">${d.status.toUpperCase()}</td>
+
+      <td class="toolbar">
+
+        <button class="btn btn-approve" onclick="setStatus(${i},'approved')">อนุมัติ</button>
+
+        <button class="btn btn-reject"  onclick="setStatus(${i},'rejected')">ปฏิเสธ</button>
+
+        <button class="btn btn-print"   onclick="printSlip(${i})">พิมพ์ใบยืนยันรับของ</button>
+
+      </td>
+
+    </tr>`).join('');
+
+}
+
+draw();
+
+function setStatus(i, s){ DATA[i].status = s; draw(); }
+
+function printSlip(i){
+
+  const d = DATA[i];
+
+  const html = `
+
+    <html><head><meta charset="utf-8"><title>Pick-up Confirmation</title>
+
+      <style>
+
+        body{font:14px/1.6 -apple-system,Segoe UI,Roboto,Arial;padding:24px}
+
+        .box{max-width:640px;margin:auto;border:1px solid #e5e7eb;border-radius:12px;padding:20px}
+
+        h1{font-size:20px;margin:0 0 12px}
+
+        .meta{color:#475569}
+
+        .row{display:flex;justify-content:space-between}
+
+      </style>
+
+    </head><body>
+
+      <div class="box">
+
+        <h1>ใบยืนยันการรับอุปกรณ์ (IT Asset Pick-up)</h1>
+
+        <div class="meta">Ticket: <b>${d.ticket}</b></div>
+
+        <div class="meta">Requester: <b>${d.requester}</b></div>
+
+        <div class="meta">Item: <b>${d.item}</b></div>
+
+        <div class="meta">Status: <b>${d.status.toUpperCase()}</b></div>
+
+        <div class="meta">Issued: ${new Date().toLocaleString()}</div>
+
+        <hr>
+
+        <div class="row"><div>ลายเซ็นผู้รับ</div><div>ลายเซ็น IT</div></div>
+
+        <div class="row"><div>__________________</div><div>__________________</div></div>
+
+      </div>
+
+      <script>window.onload=()=>window.print()</`+`script>
+
+    </body></html>`;
+
+  const f = document.getElementById('printFrame');
+
+  f.contentDocument.open(); f.contentDocument.write(html); f.contentDocument.close();
+
+}
+
+</script>
+
+</body>
+
+</html>
