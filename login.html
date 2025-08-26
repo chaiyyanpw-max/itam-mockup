@@ -1,0 +1,117 @@
+<!doctype html>
+
+<html lang="th">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>ITAM · Login</title>
+
+<link rel="icon" href="data:,">
+
+<style>
+
+  :root{ --bg:#f7f9fc; --panel:#ffffff; --line:#e5e7eb; --muted:#667085; --text:#111827; --shadow:0 12px 28px rgba(16,24,40,.08); --accent:#2563eb;}
+
+  *{box-sizing:border-box} html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Thai',sans-serif}
+
+  .wrap{min-height:100%;display:grid;place-items:center;padding:24px}
+
+  .card{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px}
+
+  h1{margin:0 0 12px;font-size:20px}
+
+  label{display:block;font-size:13px;color:var(--muted);margin-top:10px}
+
+  input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-top:6px}
+
+  .btn{width:100%;margin-top:16px;padding:10px 12px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+
+  .hint{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6}
+
+  .err{color:#b42318;font-size:13px;margin-top:8px;display:none}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="card">
+
+    <h1>เข้าสู่ระบบ</h1>
+
+    <label>User ID</label>
+
+    <input id="uid" placeholder="เช่น jack.r หรือ jack.admin" autofocus>
+
+    <label>Password</label>
+
+    <input id="pwd" type="password" placeholder="•••••••">
+
+    <div class="err" id="errBox">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
+
+    <button class="btn" id="loginBtn">Login</button>
+
+    <div class="hint">
+
+      บัญชีตัวอย่าง:<br>
+
+      • ผู้ใช้ทั่วไป → <b>jack.r</b> / <b>pass123</b><br>
+
+      • ผู้ดูแล (Admin) → <b>jack.admin</b> / <b>pass123</b>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<script>
+
+const USERS = {
+
+  "jack.r":     { id:"jack.r",     role:"user",  name:"Jack Reacher" },
+
+  "jack.admin": { id:"jack.admin", role:"admin", name:"Jack Admin" }
+
+};
+
+function saveSession(u){ try{ localStorage.setItem('itam_user', JSON.stringify(u)); }catch(e){} }
+
+function goHome(u){ location.href = (u.role === 'admin') ? 'admin.html' : 'index.html'; }
+
+document.getElementById('loginBtn').onclick = () => {
+
+  const id  = document.getElementById('uid').value.trim();
+
+  const pwd = document.getElementById('pwd').value;
+
+  const account = USERS[id];
+
+  const ok = !!account && pwd === 'pass123';
+
+  const errBox = document.getElementById('errBox');
+
+  if(!ok){ errBox.style.display='block'; return; }
+
+  errBox.style.display='none';
+
+  saveSession(account);
+
+  goHome(account);
+
+};
+
+</script>
+
+</body>
+
+</html>
